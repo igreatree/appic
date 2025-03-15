@@ -6,6 +6,7 @@ import { Project } from "@pages/Project";
 import { Settings } from "@pages/Settings";
 import { Login } from "@pages/Login";
 import { Registration } from "@pages/Registration";
+import { Objects } from "@pages/Objects";
 
 export const router = createBrowserRouter(
     [
@@ -27,6 +28,11 @@ export const router = createBrowserRouter(
                 {
                     path: "/:projectId/settings",
                     element: <Settings />,
+                    errorElement: <ErrorPage />,
+                },
+                {
+                    path: "/:projectId/objects",
+                    element: <Objects />,
                     errorElement: <ErrorPage />,
                 },
             ]
