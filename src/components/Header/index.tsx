@@ -23,7 +23,7 @@ export const Header = ({ opened, toggle, projectId }: HeaderPropsType) => {
     return (
         <AppShell.Header pl="sm" pr="sm" h={60}>
             <Group h="100%" justify="space-between" align="center">
-                <Group>
+                <Group gap={0}>
                     <Burger
                         opened={opened}
                         onClick={toggle}
@@ -36,7 +36,7 @@ export const Header = ({ opened, toggle, projectId }: HeaderPropsType) => {
                 </Group>
                 {projectId && <Text size="xl">{path ? pathNames[path] : "Project"}</Text>}
                 <Group gap={4}>
-                    <Image w={30} src={LogoImage} />
+                    <Image w={30} src={LogoImage} alt="logo" title="Appic" />
                     <Text
                         style={{
                             transition: "width .3s ease-in-out",
