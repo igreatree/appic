@@ -4,6 +4,8 @@ import { ErrorPage } from "@pages/ErrorPage";
 import Layout from "@/layouts/Layout";
 import { Project } from "@pages/Project";
 import { Settings } from "@pages/Settings";
+import { Login } from "@pages/Login";
+import { Registration } from "@pages/Registration";
 
 export const router = createBrowserRouter(
     [
@@ -29,6 +31,16 @@ export const router = createBrowserRouter(
                 },
             ]
         },
+        {
+            path: "/login",
+            element: <Login />,
+            errorElement: <ErrorPage />,
+        },
+        {
+            path: "/registration",
+            element: <Registration />,
+            errorElement: <ErrorPage />,
+        }
     ],
     // {
     //     async patchRoutesOnNavigation({ matches }) {

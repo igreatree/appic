@@ -1,7 +1,8 @@
 import { AppShell, Burger, Group } from "@mantine/core";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Image, Text } from "@mantine/core";
 import LogoImage from "@assets/images/logo.svg";
+import { Breadcrumbs } from "@components/Breadcrumbs";
 
 type HeaderPropsType = {
     opened: boolean;
@@ -10,8 +11,11 @@ type HeaderPropsType = {
 
 export const Header = ({ opened, toggle }: HeaderPropsType) => {
     const { projectId } = useParams();
+    const isSettingsOpened = window.location.pathname.replace(`/${projectId}/`, "") === "settings";
+    const breadcrumbsItems = [{ title: "Projects", href: "/" }];
+    isSettingsOpened && breadcrumbsItems.push({ title: "Project", href: `/${projectId}` });
     return (
-        <AppShell.Header pl="sm" pr="sm">
+        <AppShell.Header pl="sm" pr="sm" h={60}>
             <Burger
                 opened={opened}
                 onClick={toggle}
@@ -19,25 +23,21 @@ export const Header = ({ opened, toggle }: HeaderPropsType) => {
                 size="sm"
             />
             <Group h="100%" justify="space-between" align="center">
-                <Group>
-                    {projectId && <>
-                        <Link to="/">
-                            Projects
-                        </Link>
-                        <Link to={`/${projectId}`}>
-                            Project
-                        </Link>
-                        <Link to={`/${projectId}/settings`}>
-                            Settings
-                        </Link>
-                    </>}
+                <Breadcrumbs items={breadcrumbsItems} />
+                {projectId && <Text size="xl">{isSettingsOpened ? "Settings" : "Project"}</Text>}
+                <Group gap={4}>
+                    <Image w={30} src={LogoImage} />
+                    <Text
+                        style={{
+                            transition: "width .3s ease-in-out",
+                            overflow: "hidden"
+                        }}
+                        size="xl"
+                        w={!projectId ? "50px" : "0px"}
+                    >
+                        appic
+                    </Text>
                 </Group>
-                <Link to="/">
-                    <Group gap={4}>
-                        <Image w={30} src={LogoImage} />
-                        <Text size="xl">appic</Text>
-                    </Group>
-                </Link>
             </Group>
         </AppShell.Header>
     )

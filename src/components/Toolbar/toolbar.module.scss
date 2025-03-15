@@ -1,0 +1,7 @@
+@use '/src/variables' as v;
+
+.toolbar {
+    position: absolute;
+    height: calc(100% - v.$header-height);
+    border-right: 1px solid v.$gray;
+}

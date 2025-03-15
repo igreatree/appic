@@ -1,0 +1,7 @@
+@use '/src/variables' as v;
+
+:export {
+    gray: v.$gray;
+    headerHeight: v.$header-height;
+    dark: v.$dark;
+}
