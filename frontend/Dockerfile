@@ -12,4 +12,4 @@ RUN npm run build
 
 RUN npm install --global serve
 
-CMD ["serve", "dist", "-l", "80"]
+CMD ["serve", "-s", "dist", "-l", "80"]
