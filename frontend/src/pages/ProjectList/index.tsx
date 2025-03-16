@@ -7,7 +7,7 @@ export const ProjectList = () => {
         <Paper p="md">
             <Stack>
                 <ActionIcon><Image src={PlusIcon} /></ActionIcon>
-                <Link to="/project">Project 1 (test)</Link>
+                <Link to="/project">Project (test)</Link>
             </Stack>
         </Paper>
     )
