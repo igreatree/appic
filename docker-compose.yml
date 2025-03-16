@@ -3,13 +3,14 @@ version: "3.8"
 services:
   frontend:
     container_name: frontend
-    build: ./frontend
+    build: frontend
     ports:
       - 80:80
     restart: always
+
   backend:
     container_name: backend
-    build: ./backend
+    build: backend
     ports:
       - 3000:3000
     depends_on:
