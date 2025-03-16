@@ -2,8 +2,8 @@ version: "3.8"
 
 services:
   traefik:
-    image: "traefik:v3.3"
-    container_name: "traefik"
+    image: traefik:v2.5
+    container_name: traefik
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"
@@ -25,7 +25,7 @@ services:
     restart: always
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`localhost`)"
+      - "traefik.http.routers.frontend.rule=Host(`appic.online`)"
       - "traefik.http.routers.frontend.entrypoints=websecure"
       - "traefik.http.services.frontend.loadbalancer.server.port=80"
   backend:
@@ -33,7 +33,7 @@ services:
     build: ./backend
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.backend.rule=Host(`api.localhost`)"
+      - "traefik.http.routers.backend.rule=Host(`api.appic.online`)"
       - "traefik.http.routers.backend.entrypoints=websecure"
       - "traefik.http.services.backend.loadbalancer.server.port=3000"
     depends_on:
