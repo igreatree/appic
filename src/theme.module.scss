@@ -1,7 +1,12 @@
 @use '/src/variables' as v;
 
+.input:focus {
+    border-color: v.$primary;
+}
+
 :export {
     gray: v.$gray;
     headerHeight: v.$header-height;
     dark: v.$dark;
+    primary: v.$primary;
 }

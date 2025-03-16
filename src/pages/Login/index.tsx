@@ -1,4 +1,4 @@
-import { Button, Checkbox, Group, TextInput, Title, Stack } from "@mantine/core";
+import { Button, Group, TextInput, Title, Stack } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useNavigate } from "react-router-dom";
 

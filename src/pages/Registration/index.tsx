@@ -1,9 +1,11 @@
 import { Button, Checkbox, Group, TextInput, Title, Stack } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const Registration = () => {
     const navigate = useNavigate();
+    const [password, setPassword] = useState("");
 
     const form = useForm({
         mode: "uncontrolled",
@@ -15,6 +17,7 @@ export const Registration = () => {
 
         validate: {
             email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+            password: (value) => password === value ? null : "Passwords do not match",
         },
     });
 
@@ -34,8 +37,8 @@ export const Registration = () => {
                     withAsterisk
                     label="Password"
                     placeholder="your password"
-                    key={form.key("password")}
-                    {...form.getInputProps("password")}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                 />
                 <TextInput
                     type="password"

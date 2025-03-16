@@ -11,7 +11,7 @@ type HeaderPropsType = {
 
 const pathNames: { [key: string]: string } = {
     settings: "Settings",
-    objects: "Objetcs",
+    objects: "Objects",
 }
 
 export const Header = ({ opened, toggle, projectId }: HeaderPropsType) => {

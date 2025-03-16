@@ -1,4 +1,4 @@
-import { AppShell, Button, Stack, Image, Box } from "@mantine/core";
+import { AppShell, Button, Stack, Image } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import AddImageIcon from "@assets/icons/image_add.svg";
 import DrawIcon from "@assets/icons/draw.svg";

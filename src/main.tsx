@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { Button, createTheme, MantineProvider } from "@mantine/core";
+import { ActionIcon, Button, Checkbox, createTheme, MantineProvider, TextInput } from "@mantine/core";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router";
 import styles from "@/theme.module.scss";
@@ -12,9 +12,24 @@ const theme = createTheme({
     Button: Button.extend({
       defaultProps: {
         color: styles.dark,
-        radius: 12,
+        radius: 10,
       },
-    })
+    }),
+    ActionIcon: ActionIcon.extend({
+      defaultProps: {
+        color: styles.dark,
+      },
+    }),
+    TextInput: TextInput.extend({
+      defaultProps: {
+        classNames: { input: styles.input },
+      },
+    }),
+    Checkbox: Checkbox.extend({
+      defaultProps: {
+        color: styles.dark,
+      },
+    }),
   },
 });
 
