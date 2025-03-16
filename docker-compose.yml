@@ -1,32 +1,70 @@
-version: "3"
+version: '3.8'
 
 services:
   backend:
     container_name: backend
-    build:
-      context: .
+    build: .
     volumes:
-      - ./src:/app/src
+      - ./backend/src:/app/backend/src
     ports:
-      - 5000:5000
-      - 9229:9229
+      - "3000:3000"
+    env_file:
+      - .env
     depends_on:
-      postgres:
-        condition: service_healthy
-    restart: always
+      - postgres
+    networks:
+      - appic_network
+
   postgres:
-    container_name: postgres
-    image: postgres:14
-    privileged: true
+    image: postgres:15
+    restart: always
     environment:
       PG_DATA: /pgdata
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
     ports:
-      - 5432:5432
+      - "5432:5432"
     volumes:
-      - ./.postgres:/pgdata
-    restart: always
-    healthcheck:
-      test: PGPASSWORD=${DB_PASSWORD} psql -U ${DB_USER} -p 5432 -h 127.0.0.1 -c 'select 1' >/dev/null
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - appic_network
+
+volumes:
+  pgdata:
+
+networks:
+  appic_network:
+
+
+# version: "3.8"
+
+# services:
+#   backend:
+#     container_name: backend
+#     build:
+#       context: .
+#     volumes:
+#       - ./backend/src:/app/backend/src
+#     ports:
+#       - 3000:3000
+#     depends_on:
+#       postgres:
+#         condition: service_healthy
+#     restart: always
+#   postgres:
+#     container_name: postgres
+#     image: postgres:14
+#     privileged: true
+#     environment:
+#       PG_DATA: /pgdata
+#       POSTGRES_PASSWORD: ${DB_PASSWORD}
+#       POSTGRES_DB: ${DB_NAME}
+#       POSTGRES_USER: ${DB_USER}
+#     ports:
+#       - 5432:5432
+#     volumes:
+#       - ./.postgres:/pgdata
+#     restart: always
+#     healthcheck:
+#       test: PGPASSWORD=${DB_PASSWORD} psql -U ${DB_USER} -p 5432 -h 127.0.0.1 -c 'select 1' >/dev/null
