@@ -1,6 +1,14 @@
 version: "3.8"
 
 services:
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    volumes:
+      - ./frontend/src:/app/frontend/src
+    ports:
+      - 80:80
+    restart: always
   backend:
     container_name: backend
     build: ./backend
@@ -12,6 +20,7 @@ services:
       - postgres
 
   postgres:
+    container_name: postgres
     image: postgres:15
     restart: always
     environment:
