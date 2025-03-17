@@ -36,6 +36,8 @@ services:
   backend:
     container_name: backend
     build: ./backend
+    environment:
+      - DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@localhost:5432/${DB_NAME}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend.rule=Host(`api.appic.online`)"
