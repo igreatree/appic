@@ -1,8 +1,13 @@
-import { Button, Group, TextInput, Title, Stack } from "@mantine/core";
+import { AuthPropsType } from "@shared/api/auth";
+import { Button, Group, TextInput, Title, Stack, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useAuth } from "@components/AuthProvider";
 
 export const Login = () => {
+    const [error, setError] = useState<string>();
+    const { login } = useAuth();
     const navigate = useNavigate();
     const form = useForm({
         mode: "uncontrolled",
@@ -17,10 +22,15 @@ export const Login = () => {
         },
     });
 
+    const submitHandler = async (props: AuthPropsType) => {
+        const errorMessage = await login(props);
+        errorMessage ? setError(errorMessage) : navigate("/");
+    };
+
     return (
         <Stack p="lg" align="center" justify="center" h="100vh">
             <Title>Login</Title>
-            <form onSubmit={form.onSubmit((values) => console.log(values))}>
+            <form onSubmit={form.onSubmit(submitHandler)}>
                 <TextInput
                     withAsterisk
                     label="Email"
@@ -40,6 +50,7 @@ export const Login = () => {
                     <Button variant="outline" onClick={() => navigate("/registration")}>Registration</Button>
                     <Button type="submit">Submit</Button>
                 </Group>
+                {error && <Text mt={20} c="red">{error}</Text>}
             </form>
         </Stack>
     );

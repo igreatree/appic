@@ -1,7 +1,9 @@
-import { AppShell, Burger, Group } from "@mantine/core";
+import { AppShell, Burger, Group, Menu } from "@mantine/core";
 import { Image, Text } from "@mantine/core";
 import LogoImage from "@assets/images/logo.svg";
+import SignoutIcon from "@assets/icons/signout.svg";
 import { Breadcrumbs } from "@components/Breadcrumbs";
+import { useAuth } from "@components/AuthProvider";
 
 type HeaderPropsType = {
     opened: boolean;
@@ -15,6 +17,7 @@ const pathNames: { [key: string]: string } = {
 }
 
 export const Header = ({ opened, toggle, projectId }: HeaderPropsType) => {
+    const { user, logout } = useAuth();
     const path = window.location.pathname.replaceAll("/", "").replace(`${projectId}`, "");
     const breadcrumbsItems = [{ title: "Projects", href: "/" }];
     path && breadcrumbsItems.push({ title: "Project", href: `/${projectId}` });
@@ -35,19 +38,34 @@ export const Header = ({ opened, toggle, projectId }: HeaderPropsType) => {
                     <Breadcrumbs items={breadcrumbsItems} />
                 </Group>
                 {projectId && <Text size="xl">{path ? pathNames[path] : "Project"}</Text>}
-                <Group gap={4}>
-                    <Image w={30} src={LogoImage} alt="logo" title="Appic" />
-                    <Text
-                        style={{
-                            transition: "width .3s ease-in-out",
-                            overflow: "hidden"
-                        }}
-                        size={"24px"}
-                        w={!projectId ? "60px" : "0px"}
-                    >
-                        appic
-                    </Text>
-                </Group>
+                {user && (
+                    <Menu shadow="md" width={200}>
+                        <Menu.Target>
+                            <Group gap={4} style={{ cursor: "pointer" }}>
+                                <Image w={30} src={LogoImage} alt="logo" title="Appic" />
+                                <Text
+                                    style={{
+                                        transition: "width .3s ease-in-out",
+                                        overflow: "hidden"
+                                    }}
+                                    size={"24px"}
+                                    w={!projectId ? "60px" : "0px"}
+                                >
+                                    appic
+                                </Text>
+                            </Group>
+                        </Menu.Target>
+                        <Menu.Dropdown>
+                            <Menu.Label>{user.email}</Menu.Label>
+                            <Menu.Item
+                                leftSection={<Image src={SignoutIcon} />}
+                                onClick={logout}
+                            >
+                                Logout
+                            </Menu.Item>
+                        </Menu.Dropdown>
+                    </Menu>
+                )}
             </Group>
         </AppShell.Header>
     )

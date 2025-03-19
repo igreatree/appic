@@ -1,5 +1,5 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { AuthProvider } from "@components/AuthProvider";
 import { ActionIcon, Button, Checkbox, createTheme, MantineProvider, TextInput } from "@mantine/core";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router";
@@ -34,9 +34,9 @@ const theme = createTheme({
 });
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
+  <AuthProvider>
     <MantineProvider theme={theme}>
       <RouterProvider router={router} />
     </MantineProvider>
-  </StrictMode>,
+  </AuthProvider>
 );

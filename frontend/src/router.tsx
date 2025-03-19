@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import { ProjectList } from "@pages/ProjectList";
 import { ErrorPage } from "@pages/ErrorPage";
-import Layout from "@/layouts/Layout";
+import App from "@/layouts/App";
 import { Project } from "@pages/Project";
 import { Settings } from "@pages/Settings";
 import { Login } from "@pages/Login";
@@ -12,7 +12,7 @@ export const router = createBrowserRouter(
     [
         {
             path: "/",
-            element: <Layout />,
+            element: <App />,
             errorElement: <ErrorPage />,
             children: [
                 {
