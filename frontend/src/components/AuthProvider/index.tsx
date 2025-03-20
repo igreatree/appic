@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { authCheck, AuthPropsType, login as loginReq } from "@shared/api/auth";
-import { BadRequestType, UserType, UserTypeWithToken } from "@shared/types";
+import { BadRequestType } from "@shared/types";
+import { UserType, UserTypeWithToken } from "@shared/types/user";
 
 type AuthProviderPropsType = {
     children: ReactNode

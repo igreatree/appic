@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { ProjectList } from "@pages/ProjectList";
 import { ErrorPage } from "@pages/ErrorPage";
 import App from "@/layouts/App";
-import { Project } from "@pages/Project";
+import { Project, projectLoader } from "@pages/Project";
 import { Settings } from "@pages/Settings";
 import { Login } from "@pages/Login";
 import { Registration } from "@pages/Registration";
@@ -23,17 +23,20 @@ export const router = createBrowserRouter(
                 {
                     path: "/:projectId",
                     element: <Project />,
+                    loader: projectLoader,
                     errorElement: <ErrorPage />,
-                },
-                {
-                    path: "/:projectId/settings",
-                    element: <Settings />,
-                    errorElement: <ErrorPage />,
-                },
-                {
-                    path: "/:projectId/objects",
-                    element: <Objects />,
-                    errorElement: <ErrorPage />,
+                    children: [
+                        {
+                            path: "/:projectId/settings",
+                            element: <Settings />,
+                            errorElement: <ErrorPage />,
+                        },
+                        {
+                            path: "/:projectId/objects",
+                            element: <Objects />,
+                            errorElement: <ErrorPage />,
+                        },
+                    ]
                 },
             ]
         },
