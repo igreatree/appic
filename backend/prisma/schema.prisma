@@ -17,12 +17,13 @@ model User {
 }
 
 model Project {
-  id          Int     @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   title       String
   description String?
-  author      User?   @relation(fields: [authorId], references: [id])
+  author      User?    @relation(fields: [authorId], references: [id])
   authorId    Int
   content     String
+  lastUpdate  DateTime
 }
 
 enum Role {

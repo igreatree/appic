@@ -4,6 +4,7 @@ import { ProjectsService } from './projects.service';
 import { Project } from '@prisma/client';
 
 type ProjectFullType = Omit<Project, 'content'> & { content: unknown };
+type ResProjectType = Pick<Partial<ProjectFullType>, 'lastUpdate'> & Omit<ProjectFullType, 'lastUpdate'>;
 
 @Controller('projects')
 export class ProjectsController {
@@ -12,8 +13,8 @@ export class ProjectsController {
     deserializeProject(project: Project): ProjectFullType {
         return { ...project, content: JSON.parse(project.content) }
     }
-    serializeProject(project: ProjectFullType, additional: Partial<Project> = {}): Project {
-        return { ...project, content: JSON.stringify(project.content), ...additional }
+    serializeProject(project: ProjectFullType): Project {
+        return { ...project, content: JSON.stringify(project.content) }
     }
 
     @UseGuards(JwtAuthGuard)
@@ -32,15 +33,15 @@ export class ProjectsController {
 
     @UseGuards(JwtAuthGuard)
     @Post()
-    async createProject(@Body() data, @Request() req): Promise<ProjectFullType | null> {
-        return this.deserializeProject(await this.projectsService.createProject(this.serializeProject(data, { authorId: req.user.id })));
+    async createProject(@Body() data: ResProjectType, @Request() req): Promise<ProjectFullType | null> {
+        return this.deserializeProject(await this.projectsService.createProject(this.serializeProject({ ...data, authorId: req.user.id, lastUpdate: new Date() })));
     }
 
     @UseGuards(JwtAuthGuard)
     @Put()
-    async updateProject(@Body() data): Promise<ProjectFullType | undefined> {
+    async updateProject(@Body() data: ResProjectType): Promise<ProjectFullType | undefined> {
         const project = await this.projectsService.project({ id: Number(data.id) });
-        if (project) return this.deserializeProject(await this.projectsService.updateProject({ where: { id: Number(data.id) }, data: this.serializeProject(data) }));
+        if (project) return this.deserializeProject(await this.projectsService.updateProject({ where: { id: Number(data.id) }, data: this.serializeProject({ ...data, lastUpdate: new Date() }) }));
         throw new NotFoundException({ status: 404, message: 'Project not found' });
     }
 
