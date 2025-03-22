@@ -18,7 +18,7 @@ export type ProjectResponseType = {
     status: number
 }
 
-export const createProject = async (project: Omit<ProjectType, "id">): Promise<CreateProjectResponseType> => {
+export const createProject = async (project: Omit<ProjectType, "id" | "lastUpdate">): Promise<CreateProjectResponseType> => {
     try {
         const response = await Api.post<ProjectType>(
             "projects",
@@ -36,7 +36,7 @@ export const createProject = async (project: Omit<ProjectType, "id">): Promise<C
     }
 };
 
-export const updateProject = async (project: Partial<ProjectType>): Promise<ProjectResponseType> => {
+export const updateProject = async (project: Omit<Partial<ProjectType>, "lastUpdate">): Promise<ProjectResponseType> => {
     try {
         const response = await Api.put<ProjectType>(
             "projects",

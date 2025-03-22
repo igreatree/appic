@@ -26,7 +26,7 @@ export const ModalProjectCreate = ({ opened, close, onSuccess, onError }: ModalP
         },
     });
 
-    const submitHandler = async (props: Omit<ProjectType, "id">) => {
+    const submitHandler = async (props: Omit<ProjectType, "id" | "lastUpdate">) => {
         setIsLoading(true);
         const { status, data } = await createProject(props);
         if (status === 201) {

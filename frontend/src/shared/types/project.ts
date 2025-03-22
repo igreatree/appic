@@ -21,6 +21,7 @@ export type ProjectType = {
     id: number
     title: string
     description: string
+    lastUpdate: Date
     content: {
         background: string
         images: ImageType[]

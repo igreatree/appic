@@ -4,6 +4,7 @@ import LogoImage from "@assets/images/logo.svg";
 import SignoutIcon from "@assets/icons/signout.svg";
 import { Breadcrumbs } from "@components/Breadcrumbs";
 import { useAuth } from "@components/AuthProvider";
+import { useProjectStore } from "@shared/store";
 
 type HeaderPropsType = {
     opened: boolean;
@@ -18,9 +19,10 @@ const pathNames: { [key: string]: string } = {
 
 export const Header = ({ opened, toggle, projectId }: HeaderPropsType) => {
     const { user, logout } = useAuth();
+    const { title } = useProjectStore();
     const path = window.location.pathname.replaceAll("/", "").replace(`${projectId}`, "");
     const breadcrumbsItems = [{ title: "Projects", href: "/" }];
-    path && breadcrumbsItems.push({ title: "Project", href: `/${projectId}` });
+    path && breadcrumbsItems.push({ title: title, href: `/${projectId}` });
     const isProjectOpened = projectId && !path;
 
     return (
@@ -37,7 +39,7 @@ export const Header = ({ opened, toggle, projectId }: HeaderPropsType) => {
                     />
                     <Breadcrumbs items={breadcrumbsItems} />
                 </Group>
-                {projectId && <Text size="xl">{path ? pathNames[path] : "Project"}</Text>}
+                {projectId && <Text size="xl">{path ? pathNames[path] : title}</Text>}
                 {user && (
                     <Menu shadow="md" width={200}>
                         <Menu.Target>

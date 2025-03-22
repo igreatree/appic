@@ -1,4 +1,4 @@
-import { Paper, Image, Stack, ActionIcon, Loader, Button, Text, Box } from "@mantine/core";
+import { Image, Stack, ActionIcon, Loader, Button, Text, Box } from "@mantine/core";
 import PlusIcon from "@assets/icons/plus-light.svg";
 import { useEffect, useState } from "react";
 import { ProjectGrid } from "./ui/ProjectGrid";
@@ -22,26 +22,24 @@ export const ProjectList = () => {
     }, []);
 
     return (
-        <Paper p="md">
-            <Stack>
-                <ActionIcon title="Create project" onClick={open}><Image src={PlusIcon} /></ActionIcon>
-                <ModalProjectCreate
-                    opened={opened}
-                    close={close}
-                    onSuccess={(p) => setProjects(prev => prev ? [...prev, p] : [p])}
-                />
-                {projects ?
-                    projects.length > 0 ?
-                        <ProjectGrid projects={projects} />
-                        :
-                        <Stack className={styles.center}>
-                            <Text ta="center">You don't have any projects yet!</Text>
-                            <Button color={theme.primary} onClick={open}>Create</Button>
-                        </Stack>
+        <Stack p="md">
+            <ActionIcon title="Create project" onClick={open}><Image src={PlusIcon} /></ActionIcon>
+            <ModalProjectCreate
+                opened={opened}
+                close={close}
+                onSuccess={(p) => setProjects(prev => prev ? [...prev, p] : [p])}
+            />
+            {projects ?
+                projects.length > 0 ?
+                    <ProjectGrid projects={projects} />
                     :
-                    <Box className={styles.center}><Loader color={theme.primary} /></Box>
-                }
-            </Stack>
-        </Paper>
+                    <Stack className={styles.center}>
+                        <Text ta="center">You don't have any projects yet!</Text>
+                        <Button color={theme.primary} onClick={open}>Create</Button>
+                    </Stack>
+                :
+                <Box className={styles.center}><Loader color={theme.primary} /></Box>
+            }
+        </Stack>
     )
 }

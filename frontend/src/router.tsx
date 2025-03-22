@@ -25,18 +25,18 @@ export const router = createBrowserRouter(
                     element: <Project />,
                     loader: projectLoader,
                     errorElement: <ErrorPage />,
-                    children: [
-                        {
-                            path: "/:projectId/settings",
-                            element: <Settings />,
-                            errorElement: <ErrorPage />,
-                        },
-                        {
-                            path: "/:projectId/objects",
-                            element: <Objects />,
-                            errorElement: <ErrorPage />,
-                        },
-                    ]
+                },
+                {
+                    path: "/:projectId/settings",
+                    element: <Settings />,
+                    loader: projectLoader,
+                    errorElement: <ErrorPage />,
+                },
+                {
+                    path: "/:projectId/objects",
+                    element: <Objects />,
+                    loader: projectLoader,
+                    errorElement: <ErrorPage />,
                 },
             ]
         },
