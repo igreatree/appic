@@ -14,4 +14,6 @@ export type UnauthorizedRequestType = {
     message: string
 };
 
+export type Size = { width: number, height: number };
+
 export type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;

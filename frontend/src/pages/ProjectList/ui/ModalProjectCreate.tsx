@@ -4,6 +4,7 @@ import { BadRequestType } from "@shared/types";
 import { Button, Group, Loader, Modal, Textarea, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useState } from "react";
+import { initialProjectState } from "@shared/store/slice/project";
 
 type ModalProjectCreatePropsType = {
     opened: boolean
@@ -16,14 +17,7 @@ export const ModalProjectCreate = ({ opened, close, onSuccess, onError }: ModalP
     const [isLoading, setIsLoading] = useState(false);
     const form = useForm({
         mode: "uncontrolled",
-        initialValues: {
-            title: "",
-            description: "",
-            content: {
-                background: "/images/empty-room.jpg",
-                images: []
-            },
-        },
+        initialValues: initialProjectState,
     });
 
     const submitHandler = async (props: Omit<ProjectType, "id" | "lastUpdate">) => {

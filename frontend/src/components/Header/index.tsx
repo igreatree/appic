@@ -26,7 +26,7 @@ export const Header = ({ opened, toggle, projectId }: HeaderPropsType) => {
     const isProjectOpened = projectId && !path;
 
     return (
-        <AppShell.Header pl="sm" pr="sm" h={60}>
+        <AppShell.Header pl="sm" pr="sm">
             <Group h="100%" justify="space-between" align="center">
                 <Group gap={0}>
                     <Burger

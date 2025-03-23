@@ -20,7 +20,15 @@ const GridItem = ({ id, title, description, content, lastUpdate }: ProjectType) 
             className={styles.projectCard}
         >
             <Card.Section pos="relative">
-                <Badge pos="absolute" bottom={10} right={10} color={elapsedTime === "now" ? theme.primary : theme.dark}>{elapsedTime === "now" ? elapsedTime : `${elapsedTime} ago`}</Badge>
+                <Badge
+                    title={`Edited ${elapsedTime === "now" ? elapsedTime : `${elapsedTime} ago`}`}
+                    pos="absolute"
+                    bottom={10}
+                    right={10}
+                    color={elapsedTime === "now" ? theme.primary : theme.dark}
+                >
+                    {elapsedTime === "now" ? elapsedTime : `${elapsedTime} ago`}
+                </Badge>
                 <Image
                     style={{ aspectRatio: 1.5 }}
                     src={content.background}
