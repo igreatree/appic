@@ -1,14 +1,21 @@
-import { Controller, Get, UseGuards, Request, Post, Body, Query, NotFoundException, Put, Delete } from '@nestjs/common';
+import { Controller, Get, UseGuards, Request, Post, Body, Query, NotFoundException, Put, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ProjectsService } from './projects.service';
 import { Project } from '@prisma/client';
+import { HttpService } from '@nestjs/axios';
+import { FileInterceptor } from '@nestjs/platform-express';
+import * as FormData from 'form-data';
+import { lastValueFrom, map } from 'rxjs';
 
 type ProjectFullType = Omit<Project, 'content'> & { content: unknown };
 type ResProjectType = Pick<Partial<ProjectFullType>, 'lastUpdate'> & Omit<ProjectFullType, 'lastUpdate'>;
 
 @Controller('projects')
 export class ProjectsController {
-    constructor(private projectsService: ProjectsService) { }
+    constructor(
+        private projectsService: ProjectsService,
+        private readonly httpService: HttpService,
+    ) { }
 
     deserializeProject(project: Project): ProjectFullType {
         return { ...project, content: JSON.parse(project.content) }
@@ -51,5 +58,25 @@ export class ProjectsController {
         const project = await this.projectsService.project({ id: Number(id) });
         if (project) return this.deserializeProject(await this.projectsService.deleteProject({ id: Number(id) }));
         throw new NotFoundException({ status: 404, message: 'Project not found' });
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('uploadImage')
+    @UseInterceptors(FileInterceptor('image'))
+    async uploadImage(@UploadedFile() image: Express.Multer.File) {
+        const formData = new FormData();
+        formData.append('image', image.buffer, image.originalname);
+        return await lastValueFrom(
+            this.httpService.post(
+                process.env.IMAGE_UPLOAD_URL as string,
+                formData,
+                {
+                    params: {
+                        key: process.env.IMAGE_UPLOAD_KEY
+                    },
+                    headers: formData.getHeaders(),
+                }
+            ).pipe(map((res) => res.data))
+        );
     }
 }

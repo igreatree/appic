@@ -37,6 +37,8 @@ services:
     environment:
       - DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@postgres:5432/${DB_NAME}
       - JWT_SECRET=${JWT_SECRET}
+      - IMAGE_UPLOAD_KEY=269c080126a91ac7b6f29b286d9df9c1
+      - IMAGE_UPLOAD_URL=https://api.imgbb.com/1/upload
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend.rule=Host(`api.appic.online`)"
