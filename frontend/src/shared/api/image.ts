@@ -2,25 +2,22 @@ import { Api } from "@shared/api";
 import { AxiosError } from "axios";
 
 type UploadImageResponseType = {
-    data: { url: string }
+    data: { url: string, width: number, height: number }
     status: number
 }
 
 export const uploadImage = async (image: File): Promise<UploadImageResponseType> => {
     try {
-        const response = await Api.post<{ url: string }>(
-            "https://api.imgbb.com/1/upload/",
+        const response = await Api.post<UploadImageResponseType>(
+            "projects/uploadImage/",
             { image },
             {
-                params: {
-                    key: import.meta.env.VITE_IMAGE_UPLOAD_KEY,
-                },
                 headers: {
                     "Content-Type": "multipart/form-data",
                 }
             }
         );
-        const { data, status } = response;
+        const { data, status } = response.data;
 
         return { data, status };
     } catch (e) {

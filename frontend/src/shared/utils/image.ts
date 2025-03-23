@@ -20,6 +20,14 @@ export const compressImage = (file: File, quality = 0.7, maxWidth?: number): Pro
 
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+            const hasTransparency = checkTransparency(imageData);
+            if (hasTransparency) {
+                console.log(`%cNot compressed: image has trasparency (${(file.size / (1024 * 1024)).toFixed(2)}mb)`, "color:red; font-size:12px;");
+                resolve(file);
+                return;
+            }
             canvas.toBlob(
                 (blob) => {
                     if (blob) {
@@ -27,6 +35,7 @@ export const compressImage = (file: File, quality = 0.7, maxWidth?: number): Pro
                         console.log(`%cCompressed: ${((file.size - res.size) / (1024 * 1024)).toFixed(2)}mb (${(file.size / (1024 * 1024)).toFixed(2)} -> ${(res.size / (1024 * 1024)).toFixed(2)})`, "color:magenta; font-size:12px;");
                         resolve(res);
                     } else {
+                        console.log(`%cNot compressed: image blob error (${(file.size / (1024 * 1024)).toFixed(2)}mb)`, "color:red; font-size:12px;");
                         resolve(null);
                     }
                 },
@@ -35,4 +44,13 @@ export const compressImage = (file: File, quality = 0.7, maxWidth?: number): Pro
             );
         };
     });
-}
+};
+
+const checkTransparency = (data: ImageData["data"]) => {
+    for (let i = 3; i < data.length; i += 4) {
+        if (data[i] < 255) {
+            return true;
+        }
+    }
+    return false;
+};

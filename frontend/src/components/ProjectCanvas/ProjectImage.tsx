@@ -6,6 +6,10 @@ export const ProjectImage = (data: ImageType) => {
     const [image] = useImage(data.src);
 
     return (
-        <Image image={image} />
+        <Image
+            {...data}
+            image={image}
+            draggable
+        />
     )
 }

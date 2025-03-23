@@ -1,8 +1,9 @@
-import { Button, Loader, Image, TextInput, Textarea, Stack, Alert } from "@mantine/core";
+import { useState } from "react";
+import { Button, Image, TextInput, Textarea, Stack, Alert, Group } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { deleteProject, updateProject } from "@shared/api/project";
 import DeleteIcon from "@assets/icons/delete.svg";
-import { useState } from "react";
+import SaveIcon from "@assets/icons/save.svg";
 import { useProjectStore } from "@shared/store";
 import { useForm } from "@mantine/form";
 import { ProjectType } from "@shared/types/project";
@@ -62,28 +63,32 @@ export const Settings = () => {
                         key={form.key("description")}
                         {...form.getInputProps("description")}
                     />
-                    <Button
-                        disabled={isDeleting || isUpdating}
-                        type="submit"
-                        leftSection={isUpdating && <Loader size={20} />}
-                    >
-                        Save
-                    </Button>
-                    <Button
-                        variant="outline"
-                        onClick={async () => {
-                            setIsDeleting(true);
-                            const { status } = await deleteProject(Number(id));
-                            setIsDeleting(false);
-                            if (status === 200) {
-                                navigate("/");
-                            }
-                        }}
-                        disabled={isDeleting || isUpdating}
-                        leftSection={isDeleting ? <Loader size={20} /> : <Image src={DeleteIcon} />}
-                    >
-                        Delete project
-                    </Button>
+                    <Group>
+                        <Button
+                            variant="outline"
+                            onClick={async () => {
+                                setIsDeleting(true);
+                                const { status } = await deleteProject(Number(id));
+                                setIsDeleting(false);
+                                if (status === 200) {
+                                    navigate("/");
+                                }
+                            }}
+                            disabled={isDeleting || isUpdating}
+                            leftSection={<Image src={DeleteIcon} />}
+                            loading={isDeleting}
+                        >
+                            Delete project
+                        </Button>
+                        <Button
+                            disabled={isDeleting || isUpdating}
+                            type="submit"
+                            leftSection={<Image src={SaveIcon} />}
+                            loading={isUpdating}
+                        >
+                            Save
+                        </Button>
+                    </Group>
                     {message && <Alert variant="light" color={message.type === "Success" ? "green" : "red"} title={message.type}>{message.text}</Alert>}
                 </Stack>
             </form>

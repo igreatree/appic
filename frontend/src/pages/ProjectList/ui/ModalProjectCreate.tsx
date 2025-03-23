@@ -1,7 +1,7 @@
 import { createProject } from "@shared/api/project";
 import { ProjectType } from "@shared/types/project";
 import { BadRequestType } from "@shared/types";
-import { Button, Group, Loader, Modal, Textarea, TextInput } from "@mantine/core";
+import { Button, Group, Modal, Textarea, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useState } from "react";
 import { initialProjectState } from "@shared/store/slice/project";
@@ -57,7 +57,7 @@ export const ModalProjectCreate = ({ opened, close, onSuccess, onError }: ModalP
                     <Button
                         disabled={isLoading}
                         type="submit"
-                        leftSection={isLoading && <Loader size={20} />}
+                        loading={isLoading}
                     >
                         Submit
                     </Button>

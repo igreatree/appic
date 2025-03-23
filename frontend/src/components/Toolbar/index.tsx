@@ -1,12 +1,17 @@
+import { useRef, useState } from "react";
 import { AppShell, Button, Stack, Image, FileButton } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import AddImageIcon from "@assets/icons/image_add.svg";
 import DrawIcon from "@assets/icons/draw.svg";
 import ListIcon from "@assets/icons/list.svg";
 import SettingsIcon from "@assets/icons/settings.svg";
-import { useRef } from "react";
+import SaveIcon from "@assets/icons/save.svg";
 import { uploadImage } from "@shared/api/image";
-import { compressImage } from "@shared/utils/compressImage";
+import { updateProject } from "@shared/api/project";
+import { compressImage } from "@shared/utils/image";
+import { useProjectStore } from "@shared/store";
+import { getProjectState } from "@shared/store/utils";
+import { NotFoundRequestType } from "@shared/types";
 
 type ToolbarPropsType = {
     projectId: string
@@ -15,15 +20,47 @@ type ToolbarPropsType = {
 export const Toolbar = ({ projectId }: ToolbarPropsType) => {
     const navagate = useNavigate();
     const resetRef = useRef<() => void>(null);
+    const [isImageAdding, setIsImageAdding] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const { addProjectImage } = useProjectStore();
 
     const addImage = async (file: File | null) => {
         if (!file) return;
-        const compressedImage = await compressImage(file);
-        if (!compressedImage) return;
-        const { data, status } = await uploadImage(compressedImage);
-        console.log({ data, status });
+        const compressedImage = await compressImage(file) || file;
+        setIsImageAdding(true);
+        const { data: { url, width, height }, status } = await uploadImage(compressedImage);
+        if (status === 200) {
+            const id = crypto.randomUUID();
+            addProjectImage({
+                id,
+                src: url,
+                width,
+                height,
+                x: 0,
+                y: 0,
+                rotation: 0,
+                opacity: 1,
+                visibility: true,
+                scale: { x: 1, y: 1 }
+            });
+        }
         resetRef.current?.();
-    }
+        setIsImageAdding(false);
+    };
+
+    const saveProject = async () => {
+        setIsSaving(true);
+        const project = getProjectState();
+        const { status, data } = await updateProject(project);
+        if (status === 200) {
+            console.log(`%cSuccessfuly saved!`, "color:green; font-size:12px;");
+
+        } else {
+            const message = (data as NotFoundRequestType).message;
+            console.error(message);
+        }
+        setIsSaving(false);
+    };
 
     return (
         <AppShell.Navbar p="md">
@@ -35,8 +72,10 @@ export const Toolbar = ({ projectId }: ToolbarPropsType) => {
                                 {...props}
                                 justify="space-between"
                                 rightSection={<span />}
+                                loading={isImageAdding}
                                 leftSection={<Image src={AddImageIcon} />}
                                 variant="outline"
+                                disabled={isImageAdding}
                             >
                                 Add Image
                             </Button>
@@ -70,6 +109,16 @@ export const Toolbar = ({ projectId }: ToolbarPropsType) => {
                         onClick={() => navagate(`/${projectId}/settings`)}
                     >
                         Settings
+                    </Button>
+                    <Button
+                        justify="space-between"
+                        rightSection={<span />}
+                        loading={isSaving}
+                        leftSection={<Image src={SaveIcon} />}
+                        disabled={isSaving}
+                        onClick={saveProject}
+                    >
+                        Save
                     </Button>
                 </Stack>
             </Stack>

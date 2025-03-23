@@ -4,8 +4,12 @@ import { Layer, Stage, Image } from "react-konva";
 import { useImage } from "react-konva-utils";
 import { ProjectImage } from "./ProjectImage";
 
-export const ProjectCanvas = (project: ProjectType) => {
-    const [backgroundImage] = useImage(project.content.background);
+type ProjectCanvasPropsType = {
+    content: ProjectType["content"]
+}
+
+export const ProjectCanvas = ({ content }: ProjectCanvasPropsType) => {
+    const [backgroundImage] = useImage(content.background);
     const { width, height } = useCanvasSize({ height: -60 });
     return (
         <Stage
@@ -15,7 +19,7 @@ export const ProjectCanvas = (project: ProjectType) => {
         >
             <Layer>
                 <Image image={backgroundImage} />
-                {project.content.images.map(image => <ProjectImage {...image} />)}
+                {content.images.map((image) => <ProjectImage key={image.id} {...image} />)}
             </Layer>
         </Stage>
     )

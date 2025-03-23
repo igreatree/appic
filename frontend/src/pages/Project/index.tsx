@@ -23,11 +23,11 @@ export const projectLoader = async ({ params }: LoaderFunctionArgs) => {
 };
 
 export const Project = () => {
-    const project = getProjectState();
+    const { content } = useProjectStore();
 
     return (
         <Stack>
-            <ProjectCanvas {...project} />
+            <ProjectCanvas content={content} />
         </Stack>
     )
 };
