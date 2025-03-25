@@ -1,7 +1,9 @@
-import { ProjectType } from "@shared/types/project";
-import { Badge, Card, Image, SimpleGrid, Text } from "@mantine/core";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Badge, Box, Card, Center, Image, Loader, SimpleGrid, Text } from "@mantine/core";
+import { ProjectType } from "@shared/types/project";
 import { getElapsedTime } from "@shared/utils";
+import { generatePreviewProjectImage } from "@shared/utils/image";
 import theme from "@/theme.module.scss";
 import styles from "./projectGrid.module.scss";
 
@@ -12,6 +14,16 @@ type ProjectGridPropsType = {
 const GridItem = ({ id, title, description, content, lastUpdate }: ProjectType) => {
     const navigate = useNavigate();
     const elapsedTime = getElapsedTime(lastUpdate);
+    const [previewImage, setPreviewImage] = useState<string>();
+
+    useEffect(() => {
+        const generatePreview = async () => {
+            const preview = await generatePreviewProjectImage(content);
+            setPreviewImage(preview);
+        }
+        generatePreview();
+    }, []);
+
     return (
         <Card
             shadow="sm"
@@ -29,11 +41,18 @@ const GridItem = ({ id, title, description, content, lastUpdate }: ProjectType) 
                 >
                     {elapsedTime === "now" ? elapsedTime : `${elapsedTime} ago`}
                 </Badge>
-                <Image
-                    style={{ aspectRatio: 1.5 }}
-                    src={content.background}
+                {previewImage && <Image
+                    style={{ aspectRatio: 1.5, backgroundColor: "#e2e2e2" }}
+                    src={previewImage}
                     alt="Project"
-                />
+                />}
+                {!previewImage && (
+                    <Box style={{ aspectRatio: 1.5 }}>
+                        <Center h={"100%"}>
+                            <Loader />
+                        </Center>
+                    </Box>
+                )}
             </Card.Section>
 
             <Text title={title} fw={500} size="lg" mt="md">

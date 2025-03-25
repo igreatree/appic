@@ -1,3 +1,7 @@
+import Konva from "konva";
+import { ProjectType } from "@shared/types/project";
+import { zoomToFit } from "@shared/utils";
+
 export const compressImage = (file: File, quality = 0.7, maxWidth?: number): Promise<File | null> => {
     return new Promise((resolve) => {
         const img = new Image();
@@ -53,4 +57,31 @@ const checkTransparency = (data: ImageData["data"]) => {
         }
     }
     return false;
+};
+
+export const asyncHTMLImage = (src: string): Promise<HTMLImageElement> => {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.crossOrigin = "Anonymous";
+        img.onload = () => resolve(img);
+        // img.onerror = () => img.src = ErrorImage;
+        img.src = src;
+    });
+};
+
+const defaultSize = { width: 720, height: 480 };
+
+export const generatePreviewProjectImage = async (content: ProjectType["content"]): Promise<string> => {
+    const bgImage = await asyncHTMLImage(content.background);
+    const stage = new Konva.Stage({
+        ...defaultSize,
+        container: document.createElement("div"),
+    });
+    const layer = new Konva.Layer();
+    stage.add(layer);
+    layer.add(new Konva.Image({ image: bgImage }));
+    const images = await Promise.all(content.images.map((i) => asyncHTMLImage(i.src)))
+    images.forEach((image, i) => layer.add(new Konva.Image({ image, ...content.images[i] })));
+    zoomToFit({ stage, padding: 0, size: defaultSize, animate: false });
+    return stage.toDataURL();
 };

@@ -2,9 +2,9 @@ import { Outlet, useParams } from "react-router";
 import { AppShell } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Header } from "@components/Header";
-import variables from "@/theme.module.scss";
 import { Toolbar } from "@components/Toolbar";
 import { PrivateLayout } from "./PrivateLayout";
+import variables from "@/theme.module.scss";
 
 export default function App() {
     const [opened, { toggle }] = useDisclosure();
@@ -17,7 +17,7 @@ export default function App() {
             <AppShell
                 header={{ height: variables.headerHeight }}
                 navbar={{
-                    width: isProjectOpened ? 240 : 0,
+                    width: isProjectOpened ? 180 : 0,
                     breakpoint: 'sm',
                     collapsed: { mobile: !opened, desktop: !opened },
                 }}
