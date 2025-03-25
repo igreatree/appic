@@ -4,6 +4,7 @@ import { Badge, Box, Card, Center, Image, Loader, SimpleGrid, Text } from "@mant
 import { ProjectType } from "@shared/types/project";
 import { getElapsedTime } from "@shared/utils";
 import { generatePreviewProjectImage } from "@shared/utils/image";
+import { useIsMobile } from "@shared/utils/hooks/useIsMobile";
 import theme from "@/theme.module.scss";
 import styles from "./projectGrid.module.scss";
 
@@ -67,8 +68,9 @@ const GridItem = ({ id, title, description, content, lastUpdate }: ProjectType) 
 };
 
 export const ProjectGrid = ({ projects }: ProjectGridPropsType) => {
+    const isMobile = useIsMobile();
     return (
-        <SimpleGrid cols={4}>
+        <SimpleGrid cols={isMobile ? 1 : 4}>
             {projects.map((project) => <GridItem key={project.id} {...project} />)}
         </SimpleGrid>
     )

@@ -4,7 +4,8 @@ import { Layer, Stage, Image, Transformer } from "react-konva";
 import { useImage } from "react-konva-utils";
 import { NodeConfig, Node } from "konva/lib/Node";
 import { Vector2d } from "konva/lib/types";
-import { useCanvasSize } from "@shared/utils/useCanvasSize";
+import { useViewportSize } from "@mantine/hooks";
+import { useIsMobile } from "@shared/utils/hooks/useIsMobile";
 import { ProjectType } from "@shared/types/project";
 import { detectObjectOnPoint, zoomToFit } from "@shared/utils";
 import { useProjectStore } from "@shared/store";
@@ -17,7 +18,8 @@ type ProjectCanvasPropsType = {
 
 export const ProjectCanvas = ({ content }: ProjectCanvasPropsType) => {
     const [backgroundImage, status] = useImage(content.background, "anonymous");
-    const { width, height } = useCanvasSize({ height: -60 });
+    const { width, height } = useViewportSize();
+    const isMobile = useIsMobile();
     const stageRef = useRef<Konva.Stage>(null);
     const transformerRef = useRef<Konva.Transformer>(null);
     const startPos = useRef<{ point: Vector2d, target: Vector2d }>(null);
@@ -105,12 +107,13 @@ export const ProjectCanvas = ({ content }: ProjectCanvasPropsType) => {
         <Stage
             ref={stageRef}
             width={width}
-            height={height}
+            height={height - 60}
             onMouseDown={onMouseDown}
             onMouseMove={onMouseMove}
             onMouseUp={onMouseUp}
             onMouseLeave={onMouseUp}
             onWheel={onMouseWheel}
+            draggable={isMobile}
         >
             <Layer>
                 <Image image={backgroundImage} />
