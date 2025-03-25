@@ -4,17 +4,17 @@ import { Layer, Stage, Image, Transformer } from "react-konva";
 import { useImage } from "react-konva-utils";
 import { NodeConfig, Node } from "konva/lib/Node";
 import { Vector2d } from "konva/lib/types";
+import { Box } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import { useIsMobile } from "@shared/utils/hooks/useIsMobile";
 import { ProjectType } from "@shared/types/project";
 import { detectObjectOnPoint, zoomToFit } from "@shared/utils";
 import { useProjectStore } from "@shared/store";
 import { ProjectImage } from "./ProjectImage";
+import { Settings } from "./ui/Settings";
 import theme from "@/theme.module.scss";
 
-type ProjectCanvasPropsType = {
-    content: ProjectType["content"]
-}
+type ProjectCanvasPropsType = { content: ProjectType["content"] };
 
 export const ProjectCanvas = ({ content }: ProjectCanvasPropsType) => {
     const [backgroundImage, status] = useImage(content.background, "anonymous");
@@ -25,7 +25,7 @@ export const ProjectCanvas = ({ content }: ProjectCanvasPropsType) => {
     const startPos = useRef<{ point: Vector2d, target: Vector2d }>(null);
     const isMouseDown = useRef(false);
     const [selectedImage, setSelectedImage] = useState<Node<NodeConfig> | null>(null);
-    const { updateProjectImage } = useProjectStore();
+    const { updateProjectImage, deleteProjectImage } = useProjectStore();
 
     const onMouseDown = (e: Konva.KonvaEventObject<MouseEvent>) => {
         if (e.target.getParent() instanceof Konva.Transformer) return;
@@ -95,6 +95,14 @@ export const ProjectCanvas = ({ content }: ProjectCanvasPropsType) => {
         if (selectedImage) {
             transformerRef.current?.nodes([selectedImage]);
         }
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Backspace" && selectedImage) {
+                deleteProjectImage(selectedImage.attrs.id);
+                setSelectedImage(null);
+            }
+        };
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
     }, [selectedImage]);
 
     useEffect(() => {
@@ -104,22 +112,25 @@ export const ProjectCanvas = ({ content }: ProjectCanvasPropsType) => {
     }, [stageRef, status]);
 
     return (
-        <Stage
-            ref={stageRef}
-            width={width}
-            height={height - 60}
-            onMouseDown={onMouseDown}
-            onMouseMove={onMouseMove}
-            onMouseUp={onMouseUp}
-            onMouseLeave={onMouseUp}
-            onWheel={onMouseWheel}
-            draggable={isMobile}
-        >
-            <Layer>
-                <Image image={backgroundImage} />
-                {content.images.map((image) => <ProjectImage key={image.id} {...image} />)}
-                {selectedImage && <Transformer anchorStroke={theme.primary} borderStroke={theme.primary} ref={transformerRef} />}
-            </Layer>
-        </Stage>
+        <Box>
+            <Stage
+                ref={stageRef}
+                width={width}
+                height={height - 60}
+                onMouseDown={onMouseDown}
+                onMouseMove={onMouseMove}
+                onMouseUp={onMouseUp}
+                onMouseLeave={onMouseUp}
+                onWheel={onMouseWheel}
+                draggable={isMobile}
+            >
+                <Layer>
+                    <Image image={backgroundImage} />
+                    {content.images.map((image) => <ProjectImage key={image.id} {...image} />)}
+                    {selectedImage && <Transformer anchorStroke={theme.primary} borderStroke={theme.primary} ref={transformerRef} />}
+                </Layer>
+            </Stage>
+            {!isMobile && <Settings selectedImage={selectedImage} setSelectedImage={setSelectedImage} stage={stageRef.current} />}
+        </Box>
     )
 }

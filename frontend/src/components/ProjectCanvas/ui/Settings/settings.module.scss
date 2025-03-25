@@ -1,0 +1,43 @@
+@use '/src/variables' as v;
+
+.settings {
+    position: absolute;
+    right: 0;
+    top: v.$header-height;
+    height: calc(100vh - v.$header-height);
+    width: 260px;
+    background-color: white;
+    border-left: 1px solid #dee2e6;
+    transition: right .3s ease-in-out;
+
+    .openButton {
+        position: absolute;
+        left: -28px;
+        top: 50%;
+        border: 1px solid #dee2e6;
+        border-right: none;
+        border-radius: 4px 0 0 4px;
+        transition: opacity .3s ease-in-out;
+        opacity: 0.1;
+
+        &:hover {
+            opacity: 1;
+        }
+
+        img {
+            rotate: 180deg;
+            transition: rotate .3s ease-in-out;
+        }
+    }
+
+    &.collapsed {
+        right: -260px;
+
+        .openButton {
+
+            img {
+                rotate: 0deg;
+            }
+        }
+    }
+}

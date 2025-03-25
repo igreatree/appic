@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { AppShell, Button, Stack, Image, FileButton } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
-import AddImageIcon from "@assets/icons/image_add.svg";
+import AddImageIcon from "@assets/icons/image-add.svg";
 import DrawIcon from "@assets/icons/draw.svg";
 import ListIcon from "@assets/icons/list.svg";
 import SettingsIcon from "@assets/icons/settings.svg";
@@ -13,9 +13,7 @@ import { useProjectStore } from "@shared/store";
 import { getProjectState } from "@shared/store/utils";
 import { NotFoundRequestType } from "@shared/types";
 
-type ToolbarPropsType = {
-    projectId: string
-}
+type ToolbarPropsType = { projectId: string };
 
 export const Toolbar = ({ projectId }: ToolbarPropsType) => {
     const navagate = useNavigate();
@@ -82,6 +80,7 @@ export const Toolbar = ({ projectId }: ToolbarPropsType) => {
                         )}
                     </FileButton>
                     <Button
+                        disabled
                         justify="space-between"
                         rightSection={<span />}
                         leftSection={<Image src={DrawIcon} />}

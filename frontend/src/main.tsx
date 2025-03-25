@@ -1,7 +1,18 @@
 import { createRoot } from "react-dom/client";
 import { AuthProvider } from "@components/AuthProvider";
 import { CssLoader } from "@components/CssLoader";
-import { ActionIcon, Button, Checkbox, createTheme, Loader, MantineProvider, Textarea, TextInput } from "@mantine/core";
+import {
+    ActionIcon,
+    Button,
+    Checkbox,
+    createTheme,
+    Loader,
+    MantineProvider,
+    NumberInput,
+    Slider,
+    Textarea,
+    TextInput,
+} from "@mantine/core";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router";
 import styles from "@/theme.module.scss";
@@ -26,6 +37,11 @@ const theme = createTheme({
                 classNames: { input: styles.input },
             },
         }),
+        NumberInput: NumberInput.extend({
+            defaultProps: {
+                classNames: { input: styles.input },
+            },
+        }),
         Textarea: Textarea.extend({
             defaultProps: {
                 classNames: { input: styles.input },
@@ -41,6 +57,11 @@ const theme = createTheme({
                 loaders: { ...Loader.defaultLoaders, custom: CssLoader },
                 color: styles.dark,
                 type: "custom",
+            },
+        }),
+        Slider: Slider.extend({
+            defaultProps: {
+                color: styles.dark,
             },
         }),
     },
