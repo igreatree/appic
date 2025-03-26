@@ -1,6 +1,5 @@
 import Konva from "konva";
 import { NodeConfig, Node } from "konva/lib/Node";
-import { Animation } from "konva/lib/Animation";
 import { Vector2d } from "konva/lib/types";
 
 export const getElapsedTime = (date: Date) => {
@@ -116,21 +115,7 @@ export const zoomToFit = ({ stage, padding = 10, size, animate = true }: ZoomToF
     const y = -box.y * scale + (containerHeight - box.height * scale) / 2;
 
     if (animate) {
-        const { x: oldX, y: oldY } = stage.position();
-        const oldScale = stage.scaleX();
-        const animation = new Animation((frame) => {
-            const time = frame?.time || 0;
-            const c = time / 300 > 1 ? 1 : time / 300;
-
-            const newX = oldX + (x - oldX) * c;
-            const newY = oldY + (y - oldY) * c;
-            const newScale = oldScale - (oldScale - scale) * c;
-            stage.position({ x: newX, y: newY });
-            stage.scale({ x: newScale, y: newScale });
-
-            if (c === 1) animation.stop();
-        });
-        animation.start();
+        stage.to({ x, y, scaleX: scale, scaleY: scale });
     } else {
         stage.scale({ x: scale, y: scale });
         stage.position({ x, y });
