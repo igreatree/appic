@@ -5,14 +5,13 @@ import FlipHorizontalIcon from "@assets/icons/flipHorizontal.svg";
 import FlipVerticalIcon from "@assets/icons/flipVertical.svg";
 import RotateAnglelIcon from "@assets/icons/rotate-angle.svg";
 import { useProjectStore } from "@shared/store";
-import { ImageType } from "@shared/types/project";
 
 type ImageSettingsPropsType = { selectedImage: Node<NodeConfig> };
 
 export const ImageSettings = ({ selectedImage }: ImageSettingsPropsType) => {
     const { content, updateProjectImage } = useProjectStore();
-    const image = content.images.find(i => i.id === selectedImage.attrs.id) as ImageType;
-
+    const image = content.images.find(i => i.id === selectedImage.attrs.id);
+    if (!image) return null;
     return (
         <>
             <Stack p="sm" gap="xs">

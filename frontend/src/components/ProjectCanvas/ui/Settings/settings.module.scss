@@ -10,6 +10,18 @@
     border-left: 1px solid #dee2e6;
     transition: right .3s ease-in-out;
 
+    .title {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        width: 208px;
+    }
+
+    .wrapper {
+        height: calc(100% - 52px);
+        overflow-y: auto;
+    }
+
     .openButton {
         position: absolute;
         left: -28px;
@@ -43,15 +55,28 @@
 }
 
 .layer {
-    .eye {
+    .layerName {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        width: 150px;
+    }
+
+    .eye,
+    .more {
         opacity: 0;
     }
 
     &:hover {
         background-color: v.$gray;
 
-        .eye {
+        .eye,
+        .more {
             opacity: .5;
         }
+    }
+
+    &.active {
+        border: 1px solid v.$primary;
     }
 }

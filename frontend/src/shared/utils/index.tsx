@@ -61,6 +61,15 @@ export const detectObjectOnPoint = (stage: Konva.Stage): Node<NodeConfig> | null
     return null;
 };
 
+export const downloadURI = (uri: string, name: string) => {
+    var link = document.createElement("a");
+    link.download = name;
+    link.href = uri;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};
+
 type BboxType = { x: number, y: number } & Partial<{ width: number, height: number }>;
 
 const calcGlobalBBox = (stage: Konva.Stage) => {
@@ -114,8 +123,14 @@ export const zoomToFit = ({ stage, padding = 10, size, animate = true }: ZoomToF
     const x = -box.x * scale + (containerWidth - box.width * scale) / 2;
     const y = -box.y * scale + (containerHeight - box.height * scale) / 2;
 
+    const newScale = stage.scaleX() * scale;
     if (animate) {
-        stage.to({ x, y, scaleX: scale, scaleY: scale });
+        stage.to({
+            x: stage.x() * scale + x,
+            y: stage.y() * scale + y,
+            scaleX: newScale,
+            scaleY: newScale,
+        });
     } else {
         stage.scale({ x: scale, y: scale });
         stage.position({ x, y });

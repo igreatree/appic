@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Badge, Box, Card, Center, Image, Loader, SimpleGrid, Text } from "@mantine/core";
 import { ProjectType } from "@shared/types/project";
 import { getElapsedTime } from "@shared/utils";
-import { generatePreviewProjectImage } from "@shared/utils/image";
+import { generateProjectImage } from "@shared/utils/image";
 import { useIsMobile } from "@shared/utils/hooks/useIsMobile";
 import theme from "@/theme.module.scss";
 import styles from "./projectGrid.module.scss";
@@ -19,7 +19,7 @@ const GridItem = ({ id, title, description, content, lastUpdate }: ProjectType) 
 
     useEffect(() => {
         const generatePreview = async () => {
-            const preview = await generatePreviewProjectImage(content);
+            const preview = await generateProjectImage(content);
             setPreviewImage(preview);
         }
         generatePreview();

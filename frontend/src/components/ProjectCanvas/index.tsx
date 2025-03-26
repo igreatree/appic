@@ -98,7 +98,6 @@ export const ProjectCanvas = ({ content }: ProjectCanvasPropsType) => {
         const onKeyDown = (e: KeyboardEvent) => {
             if (e.key === "Backspace" && selectedImage) {
                 deleteProjectImage(selectedImage.attrs.id);
-                setSelectedImage(null);
             }
         };
         window.addEventListener("keydown", onKeyDown);
@@ -110,6 +109,10 @@ export const ProjectCanvas = ({ content }: ProjectCanvasPropsType) => {
             zoomToFit({ stage: stageRef.current });
         }
     }, [stageRef, status]);
+
+    useEffect(() => {
+        if (selectedImage && !content.images.find(i => i.id === selectedImage.attrs.id)) setSelectedImage(null);
+    }, [content]);
 
     return (
         <Box>
@@ -130,7 +133,7 @@ export const ProjectCanvas = ({ content }: ProjectCanvasPropsType) => {
                     {selectedImage && <Transformer anchorStroke={theme.primary} borderStroke={theme.primary} ref={transformerRef} />}
                 </Layer>
             </Stage>
-            {!isMobile && stageRef.current && content.images.length &&
+            {!isMobile && stageRef.current &&
                 <Settings
                     selectedImage={selectedImage}
                     setSelectedImage={setSelectedImage}

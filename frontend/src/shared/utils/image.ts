@@ -71,10 +71,10 @@ export const asyncHTMLImage = (src: string): Promise<HTMLImageElement> => {
 
 const defaultSize = { width: 720, height: 480 };
 
-export const generatePreviewProjectImage = async (content: ProjectType["content"]): Promise<string> => {
+export const generateProjectImage = async (content: ProjectType["content"], size = defaultSize): Promise<string> => {
     const bgImage = await asyncHTMLImage(content.background);
     const stage = new Konva.Stage({
-        ...defaultSize,
+        ...size,
         container: document.createElement("div"),
     });
     const layer = new Konva.Layer();
@@ -82,6 +82,6 @@ export const generatePreviewProjectImage = async (content: ProjectType["content"
     layer.add(new Konva.Image({ image: bgImage }));
     const images = await Promise.all(content.images.map((i) => asyncHTMLImage(i.src)))
     images.forEach((image, i) => layer.add(new Konva.Image({ image, ...content.images[i] })));
-    zoomToFit({ stage, padding: 0, size: defaultSize, animate: false });
+    zoomToFit({ stage, padding: 0, size: size, animate: false });
     return stage.toDataURL();
 };
