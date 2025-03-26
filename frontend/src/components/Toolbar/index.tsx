@@ -26,11 +26,12 @@ export const Toolbar = ({ projectId }: ToolbarPropsType) => {
         if (!file) return;
         const compressedImage = await compressImage(file) || file;
         setIsImageAdding(true);
-        const { data: { url, width, height }, status } = await uploadImage(compressedImage);
+        const { data: { url, width, height, title }, status } = await uploadImage(compressedImage);
         if (status === 200) {
             const id = crypto.randomUUID();
             addProjectImage({
                 id,
+                name: title,
                 src: url,
                 width,
                 height,

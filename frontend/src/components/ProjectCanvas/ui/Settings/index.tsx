@@ -4,16 +4,17 @@ import { ActionIcon, CloseButton, Divider, Group, Image, Box, Title } from "@man
 import { useDisclosure } from "@mantine/hooks";
 import ChevronLeftIcon from "@assets/icons/chevron-left.svg";
 import { ImageSettings } from "./ImageSettings";
+import { Layers } from "./Layers";
 import cx from "clsx";
 import styles from "./settings.module.scss";
 
 type SettingsPropsType = {
     selectedImage: Node<NodeConfig> | null
     setSelectedImage: (val: Node<NodeConfig> | null) => void
-    stage: Konva.Stage | null
+    stage: Konva.Stage
 };
 
-export const Settings = ({ selectedImage }: SettingsPropsType) => {
+export const Settings = ({ selectedImage, stage, setSelectedImage }: SettingsPropsType) => {
     const [opened, { toggle, close }] = useDisclosure();
 
     return (
@@ -34,6 +35,7 @@ export const Settings = ({ selectedImage }: SettingsPropsType) => {
                 <Image src={ChevronLeftIcon} />
             </ActionIcon>
             {selectedImage && <ImageSettings selectedImage={selectedImage} />}
+            <Layers stage={stage} setSelectedImage={setSelectedImage} />
         </Box>
     )
 }

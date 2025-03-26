@@ -11,8 +11,7 @@ export type ImageType = {
     opacity: number
     visibility: boolean
     scale: Vector2d
-    // additional
-    name?: string
+    name: string
     url?: string
     description?: string
 }

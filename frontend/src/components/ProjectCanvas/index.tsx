@@ -130,7 +130,13 @@ export const ProjectCanvas = ({ content }: ProjectCanvasPropsType) => {
                     {selectedImage && <Transformer anchorStroke={theme.primary} borderStroke={theme.primary} ref={transformerRef} />}
                 </Layer>
             </Stage>
-            {!isMobile && <Settings selectedImage={selectedImage} setSelectedImage={setSelectedImage} stage={stageRef.current} />}
+            {!isMobile && stageRef.current && content.images.length &&
+                <Settings
+                    selectedImage={selectedImage}
+                    setSelectedImage={setSelectedImage}
+                    stage={stageRef.current}
+                />
+            }
         </Box>
     )
 }

@@ -2,7 +2,7 @@ import { Api } from "@shared/api";
 import { AxiosError } from "axios";
 
 type UploadImageResponseType = {
-    data: { url: string, width: number, height: number }
+    data: { url: string, width: number, height: number, title: string }
     status: number
 }
 

@@ -62,6 +62,9 @@ const theme = createTheme({
         Slider: Slider.extend({
             defaultProps: {
                 color: styles.dark,
+                thumbSize: 16,
+                styles: { thumb: { borderWidth: 2 } },
+                size: "xs",
             },
         }),
     },

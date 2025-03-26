@@ -128,11 +128,12 @@ export const ImageSettings = ({ selectedImage }: ImageSettingsPropsType) => {
             <Stack p="sm" gap="xs">
                 <Title size="sm">Opacity</Title>
                 <Slider
+                    title="Opacity"
                     onChange={(val) => updateProjectImage({
                         id: image.id,
                         opacity: +val / 100
                     })}
-                    value={image.opacity * 100}
+                    value={Math.floor(image.opacity * 100)}
                 />
             </Stack>
             <Divider />

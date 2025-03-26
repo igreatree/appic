@@ -3,6 +3,7 @@ import { ImageType, ProjectType } from "@shared/types/project";
 import { StateCreator } from "zustand";
 
 type ProjectActions = {
+    updateProjectContent: (data: Partial<ProjectType["content"]>) => void
     addProjectImage: (image: ImageType) => void
     updateProjectImage: (image: Partial<ImageType>) => void
     deleteProjectImage: (id: string) => void
@@ -24,6 +25,9 @@ export const projectSlice: StateCreator<ProjectSliceType> = (set) => ({
     lastUpdate: new Date,
     addProjectImage: (image) => {
         set((state) => ({ ...state, content: { ...state.content, images: [...state.content.images, image] } }))
+    },
+    updateProjectContent: (data) => {
+        set((state) => ({ ...state, content: { ...state.content, ...data } }))
     },
     updateProjectImage: (image) => {
         set((state) => {

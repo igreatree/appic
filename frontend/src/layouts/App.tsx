@@ -23,7 +23,7 @@ export default function App() {
                 }}
             >
                 <Header projectId={projectId} opened={opened} toggle={toggle} />
-                <AppShell.Main>
+                <AppShell.Main pl={0}>
                     <Outlet />
                     {isProjectOpened && <Toolbar projectId={projectId} />}
                 </AppShell.Main>

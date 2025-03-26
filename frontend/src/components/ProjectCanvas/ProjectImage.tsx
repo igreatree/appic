@@ -10,6 +10,7 @@ export const ProjectImage = (data: ImageType) => {
         <Image
             {...data}
             image={image}
+            visible={data.visibility}
             onTransformEnd={(e) => {
                 updateProjectImage({
                     id: data.id,
