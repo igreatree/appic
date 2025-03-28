@@ -1,6 +1,6 @@
 import Konva from "konva";
 import { NodeConfig, Node } from "konva/lib/Node";
-import { ActionIcon, CloseButton, Divider, Group, Image, Box, Title, Stack, Button, SegmentedControl } from "@mantine/core";
+import { ActionIcon, CloseButton, Divider, Group, Image, Title, Stack, Button, SegmentedControl } from "@mantine/core";
 import { useDisclosure, useFullscreen } from "@mantine/hooks";
 import ChevronLeftIcon from "@assets/icons/chevron-left.svg";
 import ZoomToFitIcon from "@assets/icons/zoomToFit.svg";
