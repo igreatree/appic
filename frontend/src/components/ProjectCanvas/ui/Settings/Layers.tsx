@@ -118,8 +118,8 @@ export const Layers = ({ stage, selectedImage, setSelectedImage }: LayersPropsTy
 
     return (
         <>
-            <Stack pb="sm" gap="0">
-                <Title p="sm" size="sm">Layers</Title>
+            <Title p="sm" size="sm">Layers</Title>
+            <Stack pb="sm" gap="0" flex={1} style={{ overflowY: "auto" }}>
                 <DragDropContext onDragEnd={onDragEnd}>
                     <Droppable droppableId="list">
                         {provided => (
