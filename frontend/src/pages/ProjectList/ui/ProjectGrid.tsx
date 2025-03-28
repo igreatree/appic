@@ -43,7 +43,7 @@ const GridItem = ({ id, title, description, content, lastUpdate }: ProjectType) 
                     {elapsedTime === "now" ? elapsedTime : `${elapsedTime} ago`}
                 </Badge>
                 {previewImage && <Image
-                    style={{ aspectRatio: 1.5, backgroundColor: "#e2e2e2" }}
+                    style={{ aspectRatio: 1.5, backgroundColor: theme.background }}
                     src={previewImage}
                     alt="Project"
                 />}

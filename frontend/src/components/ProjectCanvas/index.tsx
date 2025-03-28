@@ -11,6 +11,8 @@ import { ProjectType } from "@shared/types/project";
 import { detectObjectOnPoint, zoomToFit } from "@shared/utils";
 import { useProjectStore } from "@shared/store";
 import { ProjectImage } from "./ProjectImage";
+import { CropImage } from "./CropImage";
+import { CropStatus } from "@shared/types";
 import { Settings } from "./ui/Settings";
 import theme from "@/theme.module.scss";
 
@@ -26,9 +28,10 @@ export const ProjectCanvas = ({ content }: ProjectCanvasPropsType) => {
     const isMouseDown = useRef(false);
     const [selectedImage, setSelectedImage] = useState<Node<NodeConfig> | null>(null);
     const { updateProjectImage, deleteProjectImage } = useProjectStore();
+    const [cropStatus, setCropStatus] = useState<CropStatus | null>(null);
 
     const onMouseDown = (e: Konva.KonvaEventObject<MouseEvent>) => {
-        if (e.target.getParent() instanceof Konva.Transformer) return;
+        if (e.target.getParent() instanceof Konva.Transformer || cropStatus) return;
         const stage = e.target.getStage();
         if (!stage) return;
 
@@ -102,7 +105,7 @@ export const ProjectCanvas = ({ content }: ProjectCanvasPropsType) => {
         };
         window.addEventListener("keydown", onKeyDown);
         return () => window.removeEventListener("keydown", onKeyDown);
-    }, [selectedImage]);
+    }, [selectedImage, cropStatus]);
 
     useEffect(() => {
         if (stageRef.current && status === "loaded") {
@@ -125,17 +128,42 @@ export const ProjectCanvas = ({ content }: ProjectCanvasPropsType) => {
                 onMouseUp={onMouseUp}
                 onMouseLeave={onMouseUp}
                 onWheel={onMouseWheel}
-                draggable={isMobile}
+                draggable={isMobile || !!cropStatus}
+                style={{ backgroundColor: theme.background }}
             >
                 <Layer>
                     <Image image={backgroundImage} />
-                    {content.images.map((image) => <ProjectImage key={image.id} {...image} />)}
-                    {selectedImage && <Transformer anchorStroke={theme.primary} borderStroke={theme.primary} ref={transformerRef} />}
+                    {content.images.map((image) => (
+                        <ProjectImage
+                            key={image.id}
+                            data={image}
+                            cropStatus={cropStatus}
+                            selectedImage={selectedImage}
+                        />
+                    ))}
+                    {cropStatus && stageRef.current && (
+                        <CropImage
+                            setCropStatus={setCropStatus}
+                            cropStatus={cropStatus}
+                            selectedImage={selectedImage}
+                            stage={stageRef.current}
+                        />
+                    )}
+                    {selectedImage && (
+                        <Transformer
+                            ref={transformerRef}
+                            anchorStroke={cropStatus ? "red" : theme.primary}
+                            borderStroke={cropStatus ? "red" : theme.primary}
+                        />
+                    )}
                 </Layer>
             </Stage>
-            {!isMobile && stageRef.current &&
+            {
+                !isMobile && stageRef.current &&
                 <Settings
                     selectedImage={selectedImage}
+                    cropStatus={cropStatus}
+                    setCropStatus={setCropStatus}
                     setSelectedImage={setSelectedImage}
                     stage={stageRef.current}
                 />

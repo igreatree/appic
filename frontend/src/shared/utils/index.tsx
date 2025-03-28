@@ -61,6 +61,74 @@ export const detectObjectOnPoint = (stage: Konva.Stage): Node<NodeConfig> | null
     return null;
 };
 
+export const rotatePoint = (
+    point: Vector2d,
+    pivot: Vector2d,
+    angleDeg: number
+): Vector2d => {
+    const angleRad = (angleDeg * Math.PI) / 180;
+    const cosTheta = Math.cos(angleRad);
+    const sinTheta = Math.sin(angleRad);
+
+    const translatedX = point.x - pivot.x;
+    const translatedY = point.y - pivot.y;
+
+    const rotatedX = translatedX * cosTheta - translatedY * sinTheta;
+    const rotatedY = translatedX * sinTheta + translatedY * cosTheta;
+
+    return {
+        x: rotatedX + pivot.x,
+        y: rotatedY + pivot.y,
+    };
+};
+
+export const dataURLtoFile = (dataurl: string, filename: string) => {
+    const arr = dataurl.split(","),
+        mimeMatch = arr[0].match(/:(.*?);/),
+        mime = mimeMatch ? mimeMatch[1] : "",
+        bstr = atob(arr[arr.length - 1]);
+
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
+};
+
+export const getImageBoundingBox = (canvas: HTMLCanvasElement) => {
+    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const pixels = imageData.data;
+
+    let minX = canvas.width, maxX = 0;
+    let minY = canvas.height, maxY = 0;
+    let found = false;
+
+    for (let y = 0; y < canvas.height; y++) {
+        for (let x = 0; x < canvas.width; x++) {
+            const index = (y * canvas.width + x) * 4;
+            const alpha = pixels[index + 3];
+
+            if (alpha > 0) {
+                if (x < minX) minX = x;
+                if (x > maxX) maxX = x;
+                if (y < minY) minY = y;
+                if (y > maxY) maxY = y;
+                found = true;
+            }
+        }
+    }
+
+    if (!found) return null;
+    return {
+        x: minX,
+        y: minY,
+        width: maxX - minX + 1,
+        height: maxY - minY + 1,
+    };
+};
+
 export const downloadURI = (uri: string, name: string) => {
     var link = document.createElement("a");
     link.download = name;

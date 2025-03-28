@@ -1,4 +1,4 @@
-import { AppShell, Burger, Group, Menu } from "@mantine/core";
+import { AppShell, Burger, Group, Menu, Title } from "@mantine/core";
 import { Image, Text } from "@mantine/core";
 import LogoImage from "@assets/images/logo.svg";
 import SignoutIcon from "@assets/icons/signout.svg";
@@ -39,7 +39,7 @@ export const Header = ({ opened, toggle, projectId }: HeaderPropsType) => {
                     />
                     <Breadcrumbs items={breadcrumbsItems} />
                 </Group>
-                {projectId && <Text size="xl">{path ? pathNames[path] : title}</Text>}
+                <Title order={5} fw={400}>{path ? pathNames[path] : title}</Title>
                 {user && (
                     <Menu shadow="md" width={200}>
                         <Menu.Target>

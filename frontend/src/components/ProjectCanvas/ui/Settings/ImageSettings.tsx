@@ -18,6 +18,7 @@ export const ImageSettings = ({ selectedImage }: ImageSettingsPropsType) => {
                 <Title size="sm">Position</Title>
                 <Group wrap="nowrap" gap={4}>
                     <NumberInput
+                        size="xs"
                         value={image.x}
                         onChange={(val) => updateProjectImage({
                             id: image.id,
@@ -28,6 +29,7 @@ export const ImageSettings = ({ selectedImage }: ImageSettingsPropsType) => {
                         title="Position X"
                     />
                     <NumberInput
+                        size="xs"
                         value={image.y}
                         onChange={(val) => updateProjectImage({
                             id: image.id,
@@ -40,6 +42,7 @@ export const ImageSettings = ({ selectedImage }: ImageSettingsPropsType) => {
                 </Group>
                 <Group wrap="nowrap" gap={12}>
                     <NumberInput
+                        size="xs"
                         value={image.rotation}
                         onChange={(val) => updateProjectImage({
                             id: image.id,
@@ -96,6 +99,7 @@ export const ImageSettings = ({ selectedImage }: ImageSettingsPropsType) => {
                 <Title size="sm">Size</Title>
                 <Group wrap="nowrap" gap={4}>
                     <NumberInput
+                        size="xs"
                         value={image.scale.x * image.width}
                         onChange={(val) => updateProjectImage({
                             id: image.id,
@@ -109,6 +113,7 @@ export const ImageSettings = ({ selectedImage }: ImageSettingsPropsType) => {
                         title="Width"
                     />
                     <NumberInput
+                        size="xs"
                         value={image.scale.y * image.height}
                         onChange={(val) => updateProjectImage({
                             id: image.id,

@@ -40,7 +40,7 @@ export const projectSlice: StateCreator<ProjectSliceType> = (set) => ({
             return { ...state, content: { ...state.content, images: updatedImages } }
         });
     },
-    deleteProjectImage: (id: string) => {
+    deleteProjectImage: (id) => {
         set((state) => {
             const updatedImages = state.content.images.filter((i) => i.id !== id);
             return { ...state, content: { ...state.content, images: updatedImages } }
