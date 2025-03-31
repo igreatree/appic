@@ -7,7 +7,7 @@ import { uploadImage } from "@shared/api/image";
 import { ImageType } from "@shared/types/project";
 import { useProjectStore } from "@shared/store";
 import { CropStatus } from "@shared/types";
-import { dataURLtoFile, getImageBoundingBox, rotatePoint } from "@shared/utils";
+import { dataURLtoFile, getImageBBox, rotatePoint } from "@shared/utils";
 import theme from "@/theme.module.scss";
 
 const compositeOperationRule: { [key: string]: GlobalCompositeOperation } = {
@@ -37,8 +37,8 @@ export const CropImage = ({ stage, selectedImage, cropStatus, setCropStatus }: C
             canvas.height = image.height;
             const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
             ctx.drawImage(selectedImage.attrs.image, 0, 0, image.width, image.height)
-            if (cropStatus in compositeOperationRule || cropStatus === "accept") {
-                if (cropStatus === "accept" && compositeOperation.current) {
+            if (cropStatus in compositeOperationRule || cropStatus === "accepted") {
+                if (cropStatus === "accepted" && compositeOperation.current) {
                     ctx.globalCompositeOperation = compositeOperationRule[compositeOperation.current];
                 } else {
                     ctx.globalCompositeOperation = compositeOperationRule[cropStatus];
@@ -63,7 +63,7 @@ export const CropImage = ({ stage, selectedImage, cropStatus, setCropStatus }: C
 
     const acceptImage = async () => {
         if (canvas) {
-            const boundingBox = getImageBoundingBox(canvas);
+            const boundingBox = getImageBBox(canvas);
             if (!boundingBox) return;
             const { width, height, x, y } = boundingBox;
             const croppedCanvas = document.createElement("canvas");
@@ -97,7 +97,7 @@ export const CropImage = ({ stage, selectedImage, cropStatus, setCropStatus }: C
                 stage.off("click", onClick);
             }
         }
-        if (cropStatus === "accept") acceptImage();
+        if (cropStatus === "accepted") acceptImage();
     }, [cropStatus]);
 
     useEffect(() => {

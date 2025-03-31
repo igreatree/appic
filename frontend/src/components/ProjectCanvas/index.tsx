@@ -12,7 +12,8 @@ import { detectObjectOnPoint, zoomToFit } from "@shared/utils";
 import { useProjectStore } from "@shared/store";
 import { ProjectImage } from "./ProjectImage";
 import { CropImage } from "./CropImage";
-import { CropStatus } from "@shared/types";
+import { CropStatus, PerspectiveStatus } from "@shared/types";
+import { PerspectiveImage } from "./PerspectiveImage";
 import { Settings } from "./ui/Settings";
 import theme from "@/theme.module.scss";
 
@@ -29,9 +30,10 @@ export const ProjectCanvas = ({ content }: ProjectCanvasPropsType) => {
     const [selectedImage, setSelectedImage] = useState<Node<NodeConfig> | null>(null);
     const { updateProjectImage, deleteProjectImage } = useProjectStore();
     const [cropStatus, setCropStatus] = useState<CropStatus | null>(null);
+    const [perspectiveStatus, setPerspectiveStatus] = useState<PerspectiveStatus | null>(null);
 
     const onMouseDown = (e: Konva.KonvaEventObject<MouseEvent>) => {
-        if (e.target.getParent() instanceof Konva.Transformer || cropStatus) return;
+        if (e.target.getParent() instanceof Konva.Transformer || cropStatus || perspectiveStatus) return;
         const stage = e.target.getStage();
         if (!stage) return;
 
@@ -105,7 +107,7 @@ export const ProjectCanvas = ({ content }: ProjectCanvasPropsType) => {
         };
         window.addEventListener("keydown", onKeyDown);
         return () => window.removeEventListener("keydown", onKeyDown);
-    }, [selectedImage, cropStatus]);
+    }, [selectedImage, cropStatus, perspectiveStatus]);
 
     useEffect(() => {
         if (stageRef.current && status === "loaded") {
@@ -128,7 +130,7 @@ export const ProjectCanvas = ({ content }: ProjectCanvasPropsType) => {
                 onMouseUp={onMouseUp}
                 onMouseLeave={onMouseUp}
                 onWheel={onMouseWheel}
-                draggable={isMobile || !!cropStatus}
+                draggable={isMobile || !!cropStatus || !!perspectiveStatus}
                 style={{ backgroundColor: theme.background }}
             >
                 <Layer>
@@ -138,6 +140,7 @@ export const ProjectCanvas = ({ content }: ProjectCanvasPropsType) => {
                             key={image.id}
                             data={image}
                             cropStatus={cropStatus}
+                            perspectiveStatus={perspectiveStatus}
                             selectedImage={selectedImage}
                         />
                     ))}
@@ -149,11 +152,19 @@ export const ProjectCanvas = ({ content }: ProjectCanvasPropsType) => {
                             stage={stageRef.current}
                         />
                     )}
-                    {selectedImage && (
+                    {selectedImage && !perspectiveStatus && (
                         <Transformer
                             ref={transformerRef}
                             anchorStroke={cropStatus ? "red" : theme.primary}
                             borderStroke={cropStatus ? "red" : theme.primary}
+                        />
+                    )}
+                    {perspectiveStatus && selectedImage && stageRef.current && (
+                        <PerspectiveImage
+                            setPerspectiveStatus={setPerspectiveStatus}
+                            perspectiveStatus={perspectiveStatus}
+                            selectedImage={selectedImage}
+                            stage={stageRef.current}
                         />
                     )}
                 </Layer>
@@ -165,6 +176,8 @@ export const ProjectCanvas = ({ content }: ProjectCanvasPropsType) => {
                     cropStatus={cropStatus}
                     setCropStatus={setCropStatus}
                     setSelectedImage={setSelectedImage}
+                    perspectiveStatus={perspectiveStatus}
+                    setPerspectiveStatus={setPerspectiveStatus}
                     stage={stageRef.current}
                 />
             }

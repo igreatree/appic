@@ -12,7 +12,7 @@ import DownloadIcon from "@assets/icons/download.svg";
 import { downloadURI, zoomToFit } from "@shared/utils";
 import { useProjectStore } from "@shared/store";
 import { generateProjectImage } from "@shared/utils/image";
-import { CropStatus } from "@shared/types";
+import { CropStatus, PerspectiveStatus } from "@shared/types";
 import { ImageSettings } from "./ImageSettings";
 import { Layers } from "./Layers";
 import cx from "clsx";
@@ -24,10 +24,20 @@ type SettingsPropsType = {
     setSelectedImage: (val: Node<NodeConfig> | null) => void
     cropStatus: CropStatus | null
     setCropStatus: (val: CropStatus | null) => void
+    perspectiveStatus: PerspectiveStatus | null
+    setPerspectiveStatus: (val: PerspectiveStatus | null) => void
     stage: Konva.Stage
 };
 
-export const Settings = ({ selectedImage, stage, setSelectedImage, cropStatus, setCropStatus }: SettingsPropsType) => {
+export const Settings = ({
+    stage,
+    selectedImage,
+    setSelectedImage,
+    cropStatus,
+    setCropStatus,
+    perspectiveStatus,
+    setPerspectiveStatus
+}: SettingsPropsType) => {
     const [opened, { toggle, close }] = useDisclosure(true);
     const { toggle: toggleFullScreen, fullscreen } = useFullscreen();
     const { title, content } = useProjectStore();
@@ -59,22 +69,37 @@ export const Settings = ({ selectedImage, stage, setSelectedImage, cropStatus, s
             </ActionIcon>
             {selectedImage && (
                 <>
-                    <ImageSettings selectedImage={selectedImage} />
+                    <ImageSettings disabled={!!perspectiveStatus} selectedImage={selectedImage} />
                     <Group w="100%" p="xs" wrap="nowrap" gap="xs" justify="center">
                         <Button
                             size="xs"
                             variant="outline"
                             color={cropStatus ? theme.primary : theme.dark}
                             leftSection={<Image src={CropIcon} />}
-                            onClick={() => !cropStatus ? selectedImage && setCropStatus("started") : setCropStatus(null)}
+                            onClick={() => {
+                                if (!cropStatus && selectedImage) {
+                                    perspectiveStatus && setPerspectiveStatus(null);
+                                    setCropStatus("started");
+                                } else {
+                                    setCropStatus(null);
+                                }
+                            }}
                         >
                             Crop
                         </Button>
                         <Button
                             size="xs"
                             variant="outline"
+                            color={perspectiveStatus ? theme.primary : theme.dark}
                             leftSection={<Image src={PerspectiveIcon} />}
-                            disabled
+                            onClick={() => {
+                                if (!perspectiveStatus && selectedImage) {
+                                    cropStatus && setCropStatus(null);
+                                    setPerspectiveStatus("started");
+                                } else {
+                                    setPerspectiveStatus(null);
+                                }
+                            }}
                         >
                             Perspective
                         </Button>
@@ -93,9 +118,9 @@ export const Settings = ({ selectedImage, stage, setSelectedImage, cropStatus, s
                                 <Button
                                     size="xs"
                                     variant="outline"
-                                    loading={cropStatus === "accept"}
+                                    loading={cropStatus === "accepted"}
                                     color={theme.primary}
-                                    onClick={() => setCropStatus("accept")}
+                                    onClick={() => setCropStatus("accepted")}
                                     flex={1}
                                     disabled={!isCropTypeSelected}
                                 >
@@ -106,6 +131,31 @@ export const Settings = ({ selectedImage, stage, setSelectedImage, cropStatus, s
                                     variant="outline"
                                     color={theme.danger}
                                     onClick={() => setCropStatus(null)}
+                                    flex={1}
+                                >
+                                    Cancel
+                                </Button>
+                            </Group>
+                        </Stack>
+                    )}
+                    {perspectiveStatus && (
+                        <Stack gap="xs" align="center" p="xs" pt={0}>
+                            <Group w="100%" wrap="nowrap" gap="xs">
+                                <Button
+                                    size="xs"
+                                    variant="outline"
+                                    loading={perspectiveStatus === "accepted"}
+                                    color={theme.primary}
+                                    onClick={() => setPerspectiveStatus("accepted")}
+                                    flex={1}
+                                >
+                                    Apply
+                                </Button>
+                                <Button
+                                    size="xs"
+                                    variant="outline"
+                                    color={theme.danger}
+                                    onClick={() => setPerspectiveStatus(null)}
                                     flex={1}
                                 >
                                     Cancel

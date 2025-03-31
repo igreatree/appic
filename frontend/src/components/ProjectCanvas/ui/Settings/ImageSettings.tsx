@@ -6,9 +6,12 @@ import FlipVerticalIcon from "@assets/icons/flipVertical.svg";
 import RotateAnglelIcon from "@assets/icons/rotate-angle.svg";
 import { useProjectStore } from "@shared/store";
 
-type ImageSettingsPropsType = { selectedImage: Node<NodeConfig> };
+type ImageSettingsPropsType = {
+    selectedImage: Node<NodeConfig>
+    disabled: boolean
+};
 
-export const ImageSettings = ({ selectedImage }: ImageSettingsPropsType) => {
+export const ImageSettings = ({ selectedImage, disabled = false }: ImageSettingsPropsType) => {
     const { content, updateProjectImage } = useProjectStore();
     const image = content.images.find(i => i.id === selectedImage.attrs.id);
     if (!image) return null;
@@ -27,6 +30,7 @@ export const ImageSettings = ({ selectedImage }: ImageSettingsPropsType) => {
                         decimalScale={2}
                         leftSection="X"
                         title="Position X"
+                        disabled={disabled}
                     />
                     <NumberInput
                         size="xs"
@@ -38,6 +42,7 @@ export const ImageSettings = ({ selectedImage }: ImageSettingsPropsType) => {
                         decimalScale={2}
                         leftSection="Y"
                         title="Position Y"
+                        disabled={disabled}
                     />
                 </Group>
                 <Group wrap="nowrap" gap={12}>
@@ -52,6 +57,7 @@ export const ImageSettings = ({ selectedImage }: ImageSettingsPropsType) => {
                         decimalScale={2}
                         leftSection={<Image src={AngleIcon} />}
                         title="Angle"
+                        disabled={disabled}
                     />
                     <ActionIcon
                         variant="white"
@@ -63,6 +69,7 @@ export const ImageSettings = ({ selectedImage }: ImageSettingsPropsType) => {
                             });
                         }}
                         title="Rotate 90° right"
+                        disabled={disabled}
                     >
                         <Image src={RotateAnglelIcon} />
                     </ActionIcon>
@@ -76,6 +83,7 @@ export const ImageSettings = ({ selectedImage }: ImageSettingsPropsType) => {
                             },
                         })}
                         title="Flip horizontal"
+                        disabled={disabled}
                     >
                         <Image src={FlipHorizontalIcon} />
                     </ActionIcon>
@@ -89,6 +97,7 @@ export const ImageSettings = ({ selectedImage }: ImageSettingsPropsType) => {
                             },
                         })}
                         title="Flip vertival"
+                        disabled={disabled}
                     >
                         <Image src={FlipVerticalIcon} />
                     </ActionIcon>
@@ -111,6 +120,7 @@ export const ImageSettings = ({ selectedImage }: ImageSettingsPropsType) => {
                         decimalScale={2}
                         leftSection="W"
                         title="Width"
+                        disabled={disabled}
                     />
                     <NumberInput
                         size="xs"
@@ -125,6 +135,7 @@ export const ImageSettings = ({ selectedImage }: ImageSettingsPropsType) => {
                         decimalScale={2}
                         leftSection="H"
                         title="Height"
+                        disabled={disabled}
                     />
                 </Group>
             </Stack>

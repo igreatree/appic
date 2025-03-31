@@ -1,6 +1,7 @@
 import Konva from "konva";
 import { NodeConfig, Node } from "konva/lib/Node";
 import { Vector2d } from "konva/lib/types";
+import { ImageType } from "@shared/types/project";
 
 export const getElapsedTime = (date: Date) => {
     const fromDate = new Date(date);
@@ -96,7 +97,7 @@ export const dataURLtoFile = (dataurl: string, filename: string) => {
     return new File([u8arr], filename, { type: mime });
 };
 
-export const getImageBoundingBox = (canvas: HTMLCanvasElement) => {
+export const getImageBBox = (canvas: HTMLCanvasElement) => {
     const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const pixels = imageData.data;
@@ -140,6 +141,33 @@ export const downloadURI = (uri: string, name: string) => {
 
 type BboxType = { x: number, y: number } & Partial<{ width: number, height: number }>;
 
+export const calcBBox = (dots: Vector2d[]) => {
+    let left: Vector2d = dots[0];
+    let right: Vector2d = dots[0];
+    let top: Vector2d = dots[0];
+    let bottom: Vector2d = dots[0];
+    dots.forEach((d) => {
+        if (d.x < left.x) {
+            left = d;
+        }
+        if (d.x > right.x) {
+            right = d;
+        }
+        if (d.y > bottom.y) {
+            bottom = d;
+        }
+        if (d.y < top.y) {
+            top = d;
+        }
+    });
+    return {
+        x: left.x,
+        y: top.y,
+        width: right.x - left.x,
+        height: bottom.y - top.y,
+    };
+};
+
 const calcGlobalBBox = (stage: Konva.Stage) => {
     const imageNodes = stage.find("Image");
     const fn = imageNodes[0].getClientRect();
@@ -178,6 +206,49 @@ type ZoomToFitPropsType = {
     size?: { width: number, height: number }
     padding?: number
     animate?: boolean
+};
+
+export const getDefaultAnglePos = (image: ImageType, flat = false) => {
+    return !flat ? [
+        {
+            x: image.x,
+            y: image.y,
+        },
+        {
+            x: image.x + image.width * image.scale.x,
+            y: image.y,
+        },
+        {
+            x: image.x + image.width * image.scale.x,
+            y: image.y + image.height * image.scale.y,
+        },
+        {
+            x: image.x,
+            y: image.y + image.height * image.scale.y,
+        },
+    ] : [0, 0, image.width, 0, image.width, image.height, 0, image.height]
+};
+
+type changeImageSizePropsType = {
+    width: number
+    height: number
+    image: HTMLImageElement
+};
+
+export const changeImageSize = ({ width, height, image }: changeImageSizePropsType): Promise<HTMLImageElement> => {
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+    ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, width, height);
+    const imgData = canvas.toDataURL();
+    return new Promise((resolve) => {
+        const htmlImage = new window.Image();
+        htmlImage.src = imgData;
+        htmlImage.onload = () => {
+            resolve(htmlImage);
+        }
+    })
 };
 
 export const zoomToFit = ({ stage, padding = 10, size, animate = true }: ZoomToFitPropsType) => {
