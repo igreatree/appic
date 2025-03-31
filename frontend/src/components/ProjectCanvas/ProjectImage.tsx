@@ -15,7 +15,7 @@ type ProjectImagePropsType = {
 export const ProjectImage = ({ data, selectedImage, cropStatus, perspectiveStatus }: ProjectImagePropsType) => {
     const [image] = useImage(data.src, "anonymous");
     const { updateProjectImage } = useProjectStore();
-    const visible = selectedImage?.attrs.id === data.id ? !!!(cropStatus || perspectiveStatus) : data.visibility;
+    const visible = selectedImage?.attrs.id === data.id ? !(cropStatus || perspectiveStatus) && data.visibility : data.visibility;
     return (
         <Image
             {...data}

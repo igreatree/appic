@@ -11,7 +11,7 @@ export const PrivateLayout = ({ children }: PrivateLayoutPropsType) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!user && !isLoading) navigate("/login");
+        if (!user && !isLoading) navigate("/promo");
     }, [user, isLoading]);
 
     if (!user || isLoading) return null;

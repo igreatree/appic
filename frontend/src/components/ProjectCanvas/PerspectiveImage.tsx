@@ -114,8 +114,12 @@ export const PerspectiveImage = ({ stage, selectedImage, perspectiveStatus, setP
                         stroke="red"
                         strokeWidth={3 / scale}
                         radius={5 / scale}
-                        onDragMove={(e) => setPoints((prev) => prev.map((p, i) => index === i ? e.target.position() : p))}
-                        onMouseOver={() => stage.container().style.cursor = "move"}
+                        onDragMove={(e) => {
+                            setPoints((prev) => prev.map((p, i) => index === i ? e.target.position() : p));
+                            stage.container().style.cursor = "grabbing"
+                        }}
+                        onMouseUp={() => stage.container().style.cursor = "grab"}
+                        onMouseOver={() => stage.container().style.cursor = "grab"}
                         onMouseLeave={() => stage.container().style.cursor = "default"}
                     />
                 ))

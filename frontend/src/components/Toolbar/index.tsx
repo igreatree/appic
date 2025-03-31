@@ -65,7 +65,7 @@ export const Toolbar = ({ projectId }: ToolbarPropsType) => {
         <AppShell.Navbar p="md">
             <Stack h={"100%"} justify="space-between">
                 <Stack>
-                    <FileButton resetRef={resetRef} onChange={addImage} accept="image/png,image/jpeg,image/svg">
+                    <FileButton resetRef={resetRef} onChange={addImage} accept="image">
                         {(props) => (
                             <Button
                                 {...props}
