@@ -1,5 +1,5 @@
 import { AuthPropsType, register } from "@shared/api/auth";
-import { Button, Checkbox, Group, TextInput, Title, Stack, Text } from "@mantine/core";
+import { Button, Group, TextInput, Title, Stack, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +15,6 @@ export const Registration = () => {
         initialValues: {
             email: "",
             password: "",
-            termsOfService: false,
         },
 
         validate: {
@@ -56,13 +55,6 @@ export const Registration = () => {
                     key={form.key("password")}
                     {...form.getInputProps("password")}
                 />
-                <Checkbox
-                    mt="md"
-                    label="I agree to sell my privacy"
-                    key={form.key("termsOfService")}
-                    {...form.getInputProps("termsOfService", { type: "checkbox" })}
-                />
-
                 <Group justify="space-between" mt="md">
                     <Button variant="outline" onClick={() => navigate("/login")}>Login</Button>
                     <Button type="submit">Submit</Button>
