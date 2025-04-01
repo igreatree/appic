@@ -1,7 +1,8 @@
-import { AppShell, Burger, Group, Menu, Title } from "@mantine/core";
+import { AppShell, Burger, Divider, Group, Menu, Title } from "@mantine/core";
 import { Image, Text } from "@mantine/core";
 import LogoImage from "@assets/images/logo.svg";
 import SignoutIcon from "@assets/icons/signout.svg";
+import MailIcon from "@assets/icons/mail.svg";
 import { Breadcrumbs } from "@components/Breadcrumbs";
 import { useAuth } from "@components/AuthProvider";
 import { useProjectStore } from "@shared/store";
@@ -64,6 +65,14 @@ export const Header = ({ opened, toggle, projectId }: HeaderPropsType) => {
                                 onClick={logout}
                             >
                                 Logout
+                            </Menu.Item>
+                            <Divider />
+                            <Menu.Label>Contacts:</Menu.Label>
+                            <Menu.Item
+                                leftSection={<Image src={MailIcon} />}
+                                onClick={() => location.href = "mailto:i@gaibullaev.ru"}
+                            >
+                                i@gaibullaev.ru
                             </Menu.Item>
                         </Menu.Dropdown>
                     </Menu>
