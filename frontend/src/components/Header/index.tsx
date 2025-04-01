@@ -25,6 +25,7 @@ export const Header = ({ opened, toggle, projectId }: HeaderPropsType) => {
     const breadcrumbsItems = [{ title: "Projects", href: "/" }];
     path && breadcrumbsItems.push({ title: title, href: `/${projectId}` });
     const isProjectOpened = projectId && !path;
+    const headerTitle = window.location.pathname === "/" ? "" : path ? pathNames[path] : title;
 
     return (
         <AppShell.Header pl="sm" pr="sm">
@@ -40,7 +41,7 @@ export const Header = ({ opened, toggle, projectId }: HeaderPropsType) => {
                     />
                     <Breadcrumbs items={breadcrumbsItems} />
                 </Group>
-                <Title order={5} fw={400}>{path ? pathNames[path] : title}</Title>
+                <Title order={5} fw={400}>{headerTitle}</Title>
                 {user && (
                     <Menu shadow="md" width={200}>
                         <Menu.Target>
