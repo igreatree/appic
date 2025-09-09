@@ -16,7 +16,7 @@ jobs:
       - name: Server connecting
         uses: appleboy/ssh-action@v0.1.7
         with:
-          host: 91.203.232.133
+          host: 185.231.244.160
           username: root
           key: ${{ secrets.SERVER_SSH }}
           script: |
